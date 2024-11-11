@@ -1,13 +1,13 @@
 {
-  "name": "furtle-cli",
+  "name": "find-cli",
   "author": "James Smith",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT, Anti-996",
-  "homepage": "https://github.com/djalbat/furtle-cli",
+  "homepage": "https://github.com/djalbat/find-cli",
   "description": "An alternative to grep.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/djalbat/furtle-cli"
+    "url": "https://github.com/djalbat/find-cli"
   },
   "dependencies": {
     "argumentative": "^2.0.32",
