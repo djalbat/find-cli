@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/djalbat/find-cli"
   },
+  "bin": {
+    "find": "./find.js"
+  },
   "dependencies": {
     "argumentative": "^2.0.32",
     "necessary": "^14.2.1"
