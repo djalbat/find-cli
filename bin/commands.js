@@ -1,10 +1,12 @@
 "use strict";
 
-const HELP_COMMAND = "help",
+const FIND_COMMAND = "find",
+      HELP_COMMAND = "help",
       VERSION_COMMAND = "version",
       INITIALISE_COMMAND = "initialise";
 
 module.exports = {
+  FIND_COMMAND,
   HELP_COMMAND,
   VERSION_COMMAND,
   INITIALISE_COMMAND

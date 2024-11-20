@@ -3,8 +3,9 @@
 const { versionUtilities, configurationUtilities } = require("necessary");
 
 const { FIND } = require("./constants"),
-      { VERSION_1_0 } = require("./versions"),
-      { createConfiguration } = require("./configuration/version_1_0"),
+      { createConfiguration } = require("./configuration/version_1_1"),
+      { VERSION_1_0, VERSION_1_1 } = require("./versions"),
+      { migrateConfigurationToVersion_1_1 } = require("./configuration/version_1_1"),
       { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages");
 
 const { rc } = configurationUtilities,
@@ -26,11 +27,9 @@ function migrateConfigurationFile() {
   let json = readRCFile();
 
   const migrationMap = {
-          [ VERSION_1_0 ]: migrateConfigurationToVersion_1_3,
-          [ VERSION_1_3 ]: migrateConfigurationToVersion_1_7,
-          [ VERSION_1_7 ] :migrateConfigurationToVersion_1_9
+          [ VERSION_1_0 ]: migrateConfigurationToVersion_1_1
         },
-        latestVersion = VERSION_1_9;
+        latestVersion = VERSION_1_1;
 
   json = migrate(json, migrationMap, latestVersion);
 

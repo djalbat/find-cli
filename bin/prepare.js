@@ -1,7 +1,9 @@
 "use strict";
 
-const { DEFAULT_HELP, DEFAULT_VERSION } = require("./defaults"),
-      { HELP_COMMAND,
+const { migrateConfigurationFile } = require("./configuration"),
+      { DEFAULT_HELP, DEFAULT_VERSION } = require("./defaults"),
+      { FIND_COMMAND,
+        HELP_COMMAND,
         VERSION_COMMAND,
         INITIALISE_COMMAND } = require("./commands");
 
@@ -22,6 +24,14 @@ function prepare(command, argument, options, main) {
 
     main(command, argument, options);
   }
+
+  migrateConfigurationFile();
+
+  argument = command; ///
+
+  command = FIND_COMMAND;
+
+  main(command, argument, options);
 }
 
 module.exports = prepare;
