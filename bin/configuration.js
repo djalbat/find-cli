@@ -10,9 +10,113 @@ const { FIND } = require("./constants"),
 
 const { rc } = configurationUtilities,
       { migrate } = versionUtilities,
-      { setRCBaseExtension, checkRCFileExists, writeRCFile, readRCFile } = rc;
+      { setRCBaseExtension, checkRCFileExists, updateRCFile, writeRCFile, readRCFile } = rc;
 
 setRCBaseExtension(FIND);
+
+function retrieveIgnoredFileNames() {
+  const configuration = readConfigurationFile(),
+        { ignoredFileNames } = configuration;
+
+  return ignoredFileNames;
+}
+
+function retrieveIgnoredFilePaths() {
+  const configuration = readConfigurationFile(),
+        { ignoredFilePaths } = configuration;
+
+  return ignoredFilePaths;
+}
+
+function retrievePermittedFileNames() {
+  const configuration = readConfigurationFile(),
+        { permittedFileNames } = configuration;
+
+  return permittedFileNames;
+}
+
+function retrievePermittedFilePaths() {
+  const configuration = readConfigurationFile(),
+        { permittedFilePaths } = configuration;
+
+  return permittedFilePaths;
+}
+
+function retrieveIgnoredDirectoryNames() {
+  const configuration = readConfigurationFile(),
+        { ignoredDirectoryNames } = configuration;
+
+  return ignoredDirectoryNames;
+}
+
+function retrieveIgnoredDirectoryPaths() {
+  const configuration = readConfigurationFile(),
+        { ignoredDirectoryPaths } = configuration;
+
+  return ignoredDirectoryPaths;
+}
+
+function retrievePermittedDirectoryNames() {
+  const configuration = readConfigurationFile(),
+        { permittedDirectoryNames } = configuration;
+
+  return permittedDirectoryNames;
+}
+
+function retrievePermittedDirectoryPaths() {
+  const configuration = readConfigurationFile(),
+        { permittedDirectoryPaths } = configuration;
+
+  return permittedDirectoryPaths;
+}
+
+function updateIgnoredFileNames(ignoredFileNames) {
+  updateConfigurationFile({
+    ignoredFileNames
+  });
+}
+
+function updateIgnoredFilePaths(ignoredFilePaths) {
+  updateConfigurationFile({
+    ignoredFilePaths
+  });
+}
+
+function updatePermittedFileNames(permittedFileNames) {
+  updateConfigurationFile({
+    permittedFileNames
+  });
+}
+
+function updatePermittedFilePaths(permittedFilePaths) {
+  updateConfigurationFile({
+    permittedFilePaths
+  });
+}
+
+function updateIgnoredDirectoryNames(ignoredDirectoryNames) {
+  updateConfigurationFile({
+    ignoredDirectoryNames
+  });
+}
+
+function updateIgnoredDirectoryPaths(ignoredDirectoryPaths) {
+  updateConfigurationFile({
+    ignoredDirectoryPaths
+  });
+}
+
+function updatePermittedDirectoryNames(permittedDirectoryNames) {
+  updateConfigurationFile({
+    permittedDirectoryNames
+  });
+}
+
+function updatePermittedDirectoryPaths(permittedDirectoryPaths) {
+  updateConfigurationFile({
+    permittedDirectoryPaths
+  });
+}
 
 function createConfigurationFile() {
   const configuration = createConfiguration(),
@@ -54,7 +158,49 @@ function assertConfigurationFileExists() {
 }
 
 module.exports = {
+  retrieveIgnoredFileNames,
+  retrieveIgnoredFilePaths,
+  retrievePermittedFileNames,
+  retrievePermittedFilePaths,
+  retrieveIgnoredDirectoryNames,
+  retrieveIgnoredDirectoryPaths,
+  retrievePermittedDirectoryNames,
+  retrievePermittedDirectoryPaths,
+  updateIgnoredFileNames,
+  updateIgnoredFilePaths,
+  updatePermittedFileNames,
+  updatePermittedFilePaths,
+  updateIgnoredDirectoryNames,
+  updateIgnoredDirectoryPaths,
+  updatePermittedDirectoryNames,
+  updatePermittedDirectoryPaths,
   createConfigurationFile,
   migrateConfigurationFile,
   checkConfigurationFileExists
 };
+
+function readConfigurationFile() {
+  assertConfigurationFileExists();
+
+  const json = readRCFile(),
+        configuration = json; ///
+
+  return configuration;
+}
+
+function writeConfigurationFile(configuration) {
+  assertConfigurationFileExists();
+
+  const json = configuration; ///
+
+  writeRCFile(json);
+}
+
+function updateConfigurationFile(addedConfiguration, ...deleteConfigurationNames) {
+  assertConfigurationFileExists();
+
+  const addedProperties = addedConfiguration, ///
+        deletedPropertyNames = deleteConfigurationNames;  ///
+
+  updateRCFile(addedProperties, ...deletedPropertyNames);
+}

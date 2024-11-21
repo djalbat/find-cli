@@ -23,6 +23,8 @@ function prepare(command, argument, options, main) {
       (command === INITIALISE_COMMAND)) {
 
     main(command, argument, options);
+
+    return;
   }
 
   migrateConfigurationFile();

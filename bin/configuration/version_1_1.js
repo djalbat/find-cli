@@ -5,17 +5,25 @@ const { VERSION_1_1 } = require("../versions");
 function migrateConfigurationToVersion_1_1(configuration) {
   const version = VERSION_1_1;
 
-  const permittedFileNames = [],
+  const ignoredFileNames = [],
+        ignoredFilePaths = [],
+        permittedFileNames = [],
         permittedFilePaths = [],
         ignoredDirectoryNames = [],
-        ignoredDirectoryPaths = [];
+        ignoredDirectoryPaths = [],
+        permittedDirectoryNames = [],
+        permittedDirectoryPaths = [];
 
   configuration = Object.assign(configuration, {
     version,
+    ignoredFileNames,
+    ignoredFilePaths,
     permittedFileNames,
     permittedFilePaths,
     ignoredDirectoryNames,
-    ignoredDirectoryPaths
+    ignoredDirectoryPaths,
+    permittedDirectoryNames,
+    permittedDirectoryPaths
   });
 
   return configuration;
@@ -23,16 +31,24 @@ function migrateConfigurationToVersion_1_1(configuration) {
 
 function createConfiguration() {
   const version = VERSION_1_1,  ///
+        ignoredFileNames = [],
+        ignoredFilePaths = [],
         permittedFileNames = [],
         permittedFilePaths = [],
         ignoredDirectoryNames = [],
         ignoredDirectoryPaths = [],
+        permittedDirectoryNames = [],
+        permittedDirectoryPaths = [],
         configuration = {
           version,
+          ignoredFileNames,
+          ignoredFilePaths,
           permittedFileNames,
           permittedFilePaths,
           ignoredDirectoryNames,
-          ignoredDirectoryPaths
+          ignoredDirectoryPaths,
+          permittedDirectoryNames,
+          permittedDirectoryPaths
         };
 
   return configuration;
