@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "argumentative": "^2.0.32",
-    "necessary": "^14.2.1"
+    "necessary": "^14.2.3"
   },
   "scripts": {}
 }
