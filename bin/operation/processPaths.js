@@ -2,9 +2,11 @@
 
 const { fileSystemUtilities } = require("necessary");
 
+const synchronousIsIgnored = require("../isIgnored/synchronous"),
+      asynchronousIsIgnored = require("../isIgnored/asynchronous");
+
 const { CURRENT_DIRECTORY_PATH } = require("../constants"),
-      { pathFromNameAndDirectoryPath } = require("../utilities/path"),
-      { synchronousIsIgnored, asynchronousIsIgnored } = require("../utilities/ignore");
+      { pathFromSubEntryNameAndDirectoryPath } = require("../utilities/path");
 
 const { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
@@ -52,10 +54,9 @@ function processSubEntryNames(subEntryNames, directoryPath, done, context) {
 function processSubEntryName(subEntryName, subEntryNames, directoryPath, done, context) {
   let synchronous;
 
-  const name = subEntryName,  ///
-        path = pathFromNameAndDirectoryPath(name, directoryPath),
+  const path = pathFromSubEntryNameAndDirectoryPath(subEntryName, directoryPath),
         directory = isEntryDirectory(path),
-        ignored = synchronousIsIgnored(name, path, directory, context);
+        ignored = synchronousIsIgnored(path, directory, context);
 
   if (ignored !== null) {
     synchronous = true;
@@ -74,7 +75,7 @@ function processSubEntryName(subEntryName, subEntryNames, directoryPath, done, c
   } else {
     synchronous = false;
 
-    asynchronousIsIgnored(name, path, directory, context, (ignored) => {
+    asynchronousIsIgnored(path, directory, context, (ignored) => {
       if (ignored === null) {
         done();
 

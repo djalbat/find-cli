@@ -28,6 +28,12 @@ class RegexMatcher {
     return matches;
   }
 
+  static fromRegex(regex) {
+    const regexMatcher = new RegexMatcher(regex);
+
+    return regexMatcher;
+  }
+
   static fromJSON(json) {
     let regexMatcher = null;
 

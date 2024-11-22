@@ -1,20 +1,20 @@
 "use strict";
 
-const { updateIgnoredFilePaths,
-        updatePermittedFilePaths,
-        updateIgnoredDirectoryPaths,
-        updatePermittedDirectoryPaths } = require("../configuration");
+const { updateIgnoredFilePathMatchers,
+        updatePermittedFilePathMatchers,
+        updateIgnoredDirectoryPathMatchers,
+        updatePermittedDirectoryPathMatchers } = require("../configuration");
 
 function writeConfigurationOperation(proceed, abort, context) {
-  const { ignoredFilePaths, permittedFilePaths, ignoredDirectoryPaths, permittedDirectoryPaths } = context;
+  const { ignoredFilePathMatchers, permittedFilePathMatchers, ignoredDirectoryPathMatchers, permittedDirectoryPathMatchers } = context;
 
-  updateIgnoredFilePaths(ignoredFilePaths);
+  updateIgnoredFilePathMatchers(ignoredFilePathMatchers);
 
-  updatePermittedFilePaths(permittedFilePaths);
+  updatePermittedFilePathMatchers(permittedFilePathMatchers);
 
-  updateIgnoredDirectoryPaths(ignoredDirectoryPaths);
+  updateIgnoredDirectoryPathMatchers(ignoredDirectoryPathMatchers);
 
-  updatePermittedDirectoryPaths(permittedDirectoryPaths);
+  updatePermittedDirectoryPathMatchers(permittedDirectoryPathMatchers);
 
   proceed();
 }

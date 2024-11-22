@@ -6,14 +6,14 @@ const { CURRENT_DIRECTORY_PATH } = require("../constants");
 
 const { concatenatePaths } = pathUtilities;
 
-function pathFromNameAndDirectoryPath(name, directoryPath) {
+function pathFromSubEntryNameAndDirectoryPath(subEntryName, directoryPath) {
   const path = (directoryPath === CURRENT_DIRECTORY_PATH) ?
-                 name : ///
-                   concatenatePaths(directoryPath, name);
+                 subEntryName : ///
+                   concatenatePaths(directoryPath, subEntryName);
 
   return path;
 }
 
 module.exports = {
-  pathFromNameAndDirectoryPath
+  pathFromSubEntryNameAndDirectoryPath
 };

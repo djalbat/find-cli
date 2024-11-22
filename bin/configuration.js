@@ -2,6 +2,10 @@
 
 const { versionUtilities, configurationUtilities } = require("necessary");
 
+const GlobMatcher = require("./matcher/glob"),
+      RegexMatcher = require("./matcher/regex"),
+      StringMatcher = require("./matcher/string");
+
 const { FIND } = require("./constants"),
       { createConfiguration } = require("./configuration/version_1_2"),
       { migrateConfigurationToVersion_1_1 } = require("./configuration/version_1_1"),
@@ -15,55 +19,91 @@ const { rc } = configurationUtilities,
 
 setRCBaseExtension(FIND);
 
-function retrieveIgnoredFilePaths() {
-  const configuration = readConfigurationFile(),
-        { ignoredFilePaths } = configuration;
+function retrieveIgnoredFilePathMatchers() {
+  const configuration = readConfigurationFile();
 
-  return ignoredFilePaths;
+  let { ignoredFilePathMatchers } = configuration;
+
+  const ignoredFilePathMatchersJSON = ignoredFilePathMatchers;  ///
+
+  ignoredFilePathMatchers = matchersFromPathMatchersJSON(ignoredFilePathMatchersJSON);
+
+  return ignoredFilePathMatchers;
 }
 
-function retrievePermittedFilePaths() {
-  const configuration = readConfigurationFile(),
-        { permittedFilePaths } = configuration;
+function retrievePermittedFilePathMatchers() {
+  const configuration = readConfigurationFile();
 
-  return permittedFilePaths;
+  let { permittedFilePathMatchers } = configuration;
+
+  const permittedFilePathMatchersJSON = permittedFilePathMatchers;  ///
+
+  permittedFilePathMatchers = matchersFromPathMatchersJSON(permittedFilePathMatchersJSON);
+
+  return permittedFilePathMatchers;
 }
 
-function retrieveIgnoredDirectoryPaths() {
-  const configuration = readConfigurationFile(),
-        { ignoredDirectoryPaths } = configuration;
+function retrieveIgnoredDirectoryPathMatchers() {
+  const configuration = readConfigurationFile();
 
-  return ignoredDirectoryPaths;
+  let { ignoredDirectoryPathMatchers } = configuration;
+
+  const ignoredDirectoryPathMatchersJSON = ignoredDirectoryPathMatchers;  ///
+
+  ignoredDirectoryPathMatchers = matchersFromPathMatchersJSON(ignoredDirectoryPathMatchersJSON);
+
+  return ignoredDirectoryPathMatchers;
 }
 
-function retrievePermittedDirectoryPaths() {
-  const configuration = readConfigurationFile(),
-        { permittedDirectoryPaths } = configuration;
+function retrievePermittedDirectoryPathMatchers() {
+  const configuration = readConfigurationFile();
 
-  return permittedDirectoryPaths;
+  let { permittedDirectoryPathMatchers } = configuration;
+
+  const permittedDirectoryPathMatchersJSON = permittedDirectoryPathMatchers;  ///
+
+  permittedDirectoryPathMatchers = matchersFromPathMatchersJSON(permittedDirectoryPathMatchersJSON);
+
+  return permittedDirectoryPathMatchers;
 }
 
-function updateIgnoredFilePaths(ignoredFilePaths) {
+function updateIgnoredFilePathMatchers(ignoredFilePathMatchers) {
+  const ignoredFilePathMatchersJSON = matchersJSONFromMatchers(ignoredFilePathMatchers);
+
+  ignoredFilePathMatchers = ignoredFilePathMatchersJSON;  ///
+
   updateConfigurationFile({
-    ignoredFilePaths
+    ignoredFilePathMatchers
   });
 }
 
-function updatePermittedFilePaths(permittedFilePaths) {
+function updatePermittedFilePathMatchers(permittedFilePathMatchers) {
+  const permittedFilePathMatchersJSON = matchersJSONFromMatchers(permittedFilePathMatchers);
+
+  permittedFilePathMatchers = permittedFilePathMatchersJSON;  ///
+
   updateConfigurationFile({
-    permittedFilePaths
+    permittedFilePathMatchers
   });
 }
 
-function updateIgnoredDirectoryPaths(ignoredDirectoryPaths) {
+function updateIgnoredDirectoryPathMatchers(ignoredDirectoryPathMatchers) {
+  const ignoredDirectoryPathMatchersJSON = matchersJSONFromMatchers(ignoredDirectoryPathMatchers);
+
+  ignoredDirectoryPathMatchers = ignoredDirectoryPathMatchersJSON;  ///
+
   updateConfigurationFile({
-    ignoredDirectoryPaths
+    ignoredDirectoryPathMatchers
   });
 }
 
-function updatePermittedDirectoryPaths(permittedDirectoryPaths) {
+function updatePermittedDirectoryPathMatchers(permittedDirectoryPathMatchers) {
+  const permittedDirectoryPathMatchersJSON = matchersJSONFromMatchers(permittedDirectoryPathMatchers);
+
+  permittedDirectoryPathMatchers = permittedDirectoryPathMatchersJSON;  ///
+
   updateConfigurationFile({
-    permittedDirectoryPaths
+    permittedDirectoryPathMatchers
   });
 }
 
@@ -108,14 +148,14 @@ function assertConfigurationFileExists() {
 }
 
 module.exports = {
-  retrieveIgnoredFilePaths,
-  retrievePermittedFilePaths,
-  retrieveIgnoredDirectoryPaths,
-  retrievePermittedDirectoryPaths,
-  updateIgnoredFilePaths,
-  updatePermittedFilePaths,
-  updateIgnoredDirectoryPaths,
-  updatePermittedDirectoryPaths,
+  retrieveIgnoredFilePathMatchers,
+  retrievePermittedFilePathMatchers,
+  retrieveIgnoredDirectoryPathMatchers,
+  retrievePermittedDirectoryPathMatchers,
+  updateIgnoredFilePathMatchers,
+  updatePermittedFilePathMatchers,
+  updateIgnoredDirectoryPathMatchers,
+  updatePermittedDirectoryPathMatchers,
   createConfigurationFile,
   migrateConfigurationFile,
   checkConfigurationFileExists
@@ -145,4 +185,27 @@ function updateConfigurationFile(addedConfiguration, ...deleteConfigurationNames
         deletedPropertyNames = deleteConfigurationNames;  ///
 
   updateRCFile(addedProperties, ...deletedPropertyNames);
+}
+
+function matchersFromPathMatchersJSON(matchersJSON) {
+  const matchers = matchersJSON.map((matcherJSON) => {
+    const json = matcherJSON, ///
+          matcher = GlobMatcher.fromJSON(json) ||
+                    RegexMatcher.fromJSON(json) ||
+                    StringMatcher.fromJSON(json);
+
+    return matcher;
+  });
+
+  return matchers;
+}
+
+function matchersJSONFromMatchers(matchers) {
+  const matchersJSON = matchers.map((matcher) => {
+    const matcherJSON = matcher.toJSON();
+
+    return matcherJSON;
+  });
+
+  return matchersJSON;
 }

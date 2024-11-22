@@ -1,21 +1,21 @@
 "use strict";
 
-const { retrieveIgnoredFilePaths,
-        retrievePermittedFilePaths,
-        retrieveIgnoredDirectoryPaths,
-        retrievePermittedDirectoryPaths } = require("../configuration");
+const { retrieveIgnoredFilePathMatchers,
+        retrievePermittedFilePathMatchers,
+        retrieveIgnoredDirectoryPathMatchers,
+        retrievePermittedDirectoryPathMatchers } = require("../configuration");
 
 function readConfigurationOperation(proceed, abort, context) {
-  const ignoredFilePaths = retrieveIgnoredFilePaths(),
-        permittedFilePaths = retrievePermittedFilePaths(),
-        ignoredDirectoryPaths = retrieveIgnoredDirectoryPaths(),
-        permittedDirectoryPaths = retrievePermittedDirectoryPaths();
+  const ignoredFilePathMatchers = retrieveIgnoredFilePathMatchers(),
+        permittedFilePathMatchers = retrievePermittedFilePathMatchers(),
+        ignoredDirectoryPathMatchers = retrieveIgnoredDirectoryPathMatchers(),
+        permittedDirectoryPathMatchers = retrievePermittedDirectoryPathMatchers();
 
   Object.assign(context, {
-    ignoredFilePaths,
-    permittedFilePaths,
-    ignoredDirectoryPaths,
-    permittedDirectoryPaths
+    ignoredFilePathMatchers,
+    permittedFilePathMatchers,
+    ignoredDirectoryPathMatchers,
+    permittedDirectoryPathMatchers
   });
 
   proceed();
