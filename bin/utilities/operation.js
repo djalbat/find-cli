@@ -2,28 +2,7 @@
 
 const { asynchronousUtilities } = require("necessary");
 
-const { forEach, whilst } = asynchronousUtilities;
-
-function executeOperation(array, operation, proceed, abort, context) {
-  let completed = true;
-
-  forEach(array, (element, next, done, context) => {
-    const proceed = next, ///
-          abort = () => {
-            completed = false;
-
-            done();
-          }
-
-    operation(element, proceed, abort, context);
-  }, done, context);
-
-  function done() {
-    completed ?
-      proceed() :
-        abort();
-  }
-}
+const { whilst } = asynchronousUtilities;
 
 function executeOperations(operations, callback, context) {
   let completed = true;
@@ -55,6 +34,5 @@ function executeOperations(operations, callback, context) {
 }
 
 module.exports = {
-  executeOperation,
 	executeOperations
 };

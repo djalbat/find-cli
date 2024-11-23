@@ -5,7 +5,7 @@ const FIND = "find",
       FIND_CLI = "Find-CLI",
       DIRECTORY = "directory",
       EMPTY_STRING = "",
-      CURRENT_DIRECTORY_PATH = ".";
+      ROOT_DIRECTORY_PATH = "./";
 
 module.exports = {
   FIND,
@@ -13,5 +13,5 @@ module.exports = {
   FIND_CLI,
   DIRECTORY,
   EMPTY_STRING,
-  CURRENT_DIRECTORY_PATH
+  ROOT_DIRECTORY_PATH
 };

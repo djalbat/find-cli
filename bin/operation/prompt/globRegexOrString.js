@@ -9,12 +9,10 @@ const { validateGlobRegexOrString} = require("../../utilities/validate"),
 const { prompt } = shellUtilities;
 
 function globRegexOrStringPromptOperation(proceed, abort, context) {
-  const { path, directory } = context,
+  const { path } = context,
         description = `Glob, regex or string: `,
         errorMessage = INVALID_GLOB_REGEX_OR_STRING_MESSAGE,
-        initialAnswer = directory ?
-                          `${path}/` :
-                             path,  ///
+        initialAnswer = path,  ///
         validationFunction = validateGlobRegexOrString,  ///
         options = {
           description,

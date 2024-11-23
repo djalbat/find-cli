@@ -5,9 +5,9 @@ const GlobMatcher = require("../matcher/glob"),
       StringMatcher = require("../matcher/string");
 
 function addMatcherOperation(proceed, abort, context) {
-  const { ignored, glob, regex, string, directory } = context;
+  const { glob, regex, string, directory, pathIgnored } = context;
 
-  ignored ?
+  pathIgnored ?
     addIgnoreMatcher(glob, regex, string, directory, context) :
       addPermitMatcher(glob, regex, string, directory, context);
 

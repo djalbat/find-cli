@@ -10,14 +10,22 @@ const { FIND } = require("./constants"),
       { createConfiguration } = require("./configuration/version_1_2"),
       { migrateConfigurationToVersion_1_1 } = require("./configuration/version_1_1"),
       { migrateConfigurationToVersion_1_2 } = require("./configuration/version_1_2"),
-      { VERSION_1_0, VERSION_1_1, VERSION_1_2 } = require("./versions"),
-      { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages");
+      { migrateConfigurationToVersion_1_3 } = require("./configuration/version_1_3"),
+      { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages"),
+      { VERSION_1_0, VERSION_1_1, VERSION_1_2, VERSION_1_3 } = require("./versions");
 
 const { rc } = configurationUtilities,
       { migrate } = versionUtilities,
       { setRCBaseExtension, checkRCFileExists, updateRCFile, writeRCFile, readRCFile } = rc;
 
 setRCBaseExtension(FIND);
+
+function retrieveRootDirectoryPaths() {
+  const configuration = readConfigurationFile(),
+        { rootDirectoryPaths } = configuration;
+
+  return rootDirectoryPaths;
+}
 
 function retrieveIgnoredFilePathMatchers() {
   const configuration = readConfigurationFile();
@@ -65,6 +73,12 @@ function retrievePermittedDirectoryPathMatchers() {
   permittedDirectoryPathMatchers = matchersFromPathMatchersJSON(permittedDirectoryPathMatchersJSON);
 
   return permittedDirectoryPathMatchers;
+}
+
+function updateRootDirectoryPaths(rootDirectoryPaths) {
+  updateConfigurationFile({
+    rootDirectoryPaths
+  });
 }
 
 function updateIgnoredFilePathMatchers(ignoredFilePathMatchers) {
@@ -122,8 +136,9 @@ function migrateConfigurationFile() {
   const migrationMap = {
           [ VERSION_1_0 ]: migrateConfigurationToVersion_1_1,
           [ VERSION_1_1 ]: migrateConfigurationToVersion_1_2,
+          [ VERSION_1_2 ]: migrateConfigurationToVersion_1_3,
         },
-        latestVersion = VERSION_1_2;
+        latestVersion = VERSION_1_3;
 
   json = migrate(json, migrationMap, latestVersion);
 
@@ -148,10 +163,12 @@ function assertConfigurationFileExists() {
 }
 
 module.exports = {
+  retrieveRootDirectoryPaths,
   retrieveIgnoredFilePathMatchers,
   retrievePermittedFilePathMatchers,
   retrieveIgnoredDirectoryPathMatchers,
   retrievePermittedDirectoryPathMatchers,
+  updateRootDirectoryPaths,
   updateIgnoredFilePathMatchers,
   updatePermittedFilePathMatchers,
   updateIgnoredDirectoryPathMatchers,

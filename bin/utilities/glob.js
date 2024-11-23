@@ -12,6 +12,7 @@ const { HAT_CHARACTER,
         PERIOD_CHARACTER,
         ASTERISK_CHARACTER,
         BACKSLASH_CHARACTER,
+        FORWARD_SLASH_CHARACTER,
         QUESTION_MARK_CHARACTER,
         OPENING_BRACKET_CHARACTER,
         CLOSING_BRACKET_CHARACTER,
@@ -59,10 +60,54 @@ function regexFromGlob(glob) {
       }
 
       case ASTERISK_CHARACTER: {
-        pattern = `${pattern}.*?`;
+        switch (nextCharacter) {
+          case ASTERISK_CHARACTER: {
+            nextIndex++;
 
-        if (nextCharacter === ASTERISK_CHARACTER) {
-          index = nextIndex;  ///
+            nextCharacter = (nextIndex < length) ?
+                              characters[nextIndex] :
+                                null;
+
+            switch (nextCharacter) {
+              case FORWARD_SLASH_CHARACTER: {
+                pattern = `${pattern}(?:[^/]+\\/)*`;
+
+                index = nextIndex;  ///
+
+                break;
+              }
+
+              case null: {
+                pattern = `${pattern}.*`;
+
+                index = nextIndex;  ///
+
+                break;
+              }
+
+              default: {
+                pattern = null;
+
+                break;
+              }
+            }
+
+            break;
+          }
+
+          case FORWARD_SLASH_CHARACTER: {
+            pattern = `${pattern}[^/]+\\/`;
+
+            index = nextIndex;  ///
+
+            break;
+          }
+
+          default: {
+            pattern = `${pattern}[^/]+?`;
+
+            break;
+          }
         }
 
         break;
@@ -76,6 +121,62 @@ function regexFromGlob(glob) {
         } else {
           pattern = null;
         }
+        break;
+      }
+
+      case FORWARD_SLASH_CHARACTER: {
+        switch (nextCharacter) {
+          case ASTERISK_CHARACTER: {
+            nextIndex++;
+
+            nextCharacter = (nextIndex < length) ?
+                              characters[nextIndex] :
+                                null;
+
+            switch (nextCharacter) {
+              case ASTERISK_CHARACTER: {
+                nextIndex++;
+
+                nextCharacter = (nextIndex < length) ?
+                                  characters[nextIndex] :
+                                    null;
+
+                switch (nextCharacter) {
+                  case null: {
+                    pattern = `${pattern}(?:\\/.*)?`;
+
+                    index = nextIndex;  ///
+
+                    break;
+                  }
+
+                  default: {
+                    pattern = `${pattern}\\${character}`;
+
+                    break;
+                  }
+                }
+
+                break;
+              }
+
+              default: {
+                pattern = `${pattern}\\${character}`;
+
+                break;
+              }
+            }
+
+            break;
+          }
+
+          default: {
+            pattern = `${pattern}\\${character}`;
+
+            break;
+          }
+        }
+
         break;
       }
 
@@ -163,14 +264,16 @@ function regexFromGlob(glob) {
     index++;
   }
 
-  pattern = `${HAT_CHARACTER}${pattern}${DOLLAR_CHARACTER}`;
+  if (pattern !== null) {
+    pattern = `${HAT_CHARACTER}${pattern}${DOLLAR_CHARACTER}`;
 
-  try {
-    const regExp = new RegExp(pattern);
+    try {
+      const regExp = new RegExp(pattern);
 
-    regex = regExp; ///
-  } catch (error) {
-    ///
+      regex = regExp; ///
+    } catch (error) {
+      ///
+    }
   }
 
   return regex;

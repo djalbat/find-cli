@@ -13,36 +13,18 @@ function migrateConfigurationToVersion_1_2(configuration) {
         ignoredDirectoryPathMatchers = matchersFromPaths(ignoredDirectoryPaths),
         permittedDirectoryPathMatchers = matchersFromPaths(permittedDirectoryPaths);
 
-  configuration = Object.assign(configuration, {
+  configuration = {
     version,
     ignoredFilePathMatchers,
     permittedFilePathMatchers,
     ignoredDirectoryPathMatchers,
     permittedDirectoryPathMatchers
-  });
-
-  return configuration;
-}
-
-function createConfiguration() {
-  const version = VERSION_1_2,  ///
-        ignoredFilePathMatchers = [],
-        permittedFilePathMatchers = [],
-        ignoredDirectoryPathMatchers = [],
-        permittedDirectoryPathMatchers = [],
-        configuration = {
-          version,
-          ignoredFilePathMatchers,
-          permittedFilePathMatchers,
-          ignoredDirectoryPathMatchers,
-          permittedDirectoryPathMatchers
-        };
+  };
 
   return configuration;
 }
 
 module.exports = {
-  createConfiguration,
   migrateConfigurationToVersion_1_2
 };
 

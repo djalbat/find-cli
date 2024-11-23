@@ -51,8 +51,13 @@ class GlobMatcher {
   }
 
   static fromGlob(glob) {
-    const regex = regexFromGlob(glob),
-          globMatcher = new GlobMatcher(glob, regex);
+    let globMatcher = null;
+
+    const regex = regexFromGlob(glob);
+
+    if (regex !== null) {
+      globMatcher = new GlobMatcher(glob, regex);
+    }
 
     return globMatcher;
   }

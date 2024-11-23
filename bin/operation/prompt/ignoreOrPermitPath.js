@@ -9,7 +9,7 @@ const { isAnswerIgnore } = require("../../utilities/prompt"),
 
 const { prompt } = shellUtilities;
 
-function ignoreOrPermitPromptOperation(proceed, abort, context) {
+function ignoreOrPermitPathPromptOperation(proceed, abort, context) {
   const { path, directory } = context,
         fileOrDirectory = directory ?
                             DIRECTORY :
@@ -33,14 +33,14 @@ function ignoreOrPermitPromptOperation(proceed, abort, context) {
     }
 
     const ignore = isAnswerIgnore(answer),
-          ignored = ignore; ///
+          pathIgnored = ignore; ///
 
     Object.assign(context, {
-      ignored
+      pathIgnored
     });
 
     proceed();
   });
 }
 
-module.exports = ignoreOrPermitPromptOperation;
+module.exports = ignoreOrPermitPathPromptOperation;

@@ -1,65 +1,75 @@
 "use strict";
 
-function synchronousIsIgnored(path, directory, context) {
-  let ignored = null;
+const { EMPTY_STRING } = require("../constants"),
+      { stripRootDirectoryFromPath } = require("../utilities/path");
 
-  if (directory) {
-    const { permittedDirectoryPathMatchers, ignoredDirectoryPathMatchers } = context,
-          string = `${path}/`;
+function synchronousIsFilePathIgnored(filePath, context) {
+  let filePathIgnored = null;
 
-    permittedDirectoryPathMatchers.some((permittedDirectoryPathMatcher) => {
-      const matches = permittedDirectoryPathMatcher.match(string);
+  filePath = stripRootDirectoryFromPath(filePath, context);  ///
 
-      if (matches) {
-        ignored = false;
-      }
+  const { ignoredFilePathMatchers, permittedFilePathMatchers } = context,
+        string = filePath;  ///
 
-      if (ignored !== null) {
-        return true;
-      }
-    });
+  ignoredFilePathMatchers.some((ignoredFilePathMatcher) => {
+    const matches = ignoredFilePathMatcher.match(string);
+
+    if (matches) {
+      filePathIgnored = true;
+
+      return true;
+    }
+  });
+
+  permittedFilePathMatchers.some((permittedFilePathMatcher) => {
+    const matches = permittedFilePathMatcher.match(string);
+
+    if (matches) {
+      filePathIgnored = false;
+
+      return true;
+    }
+  });
+
+  return filePathIgnored;
+}
+
+function synchronousIsDirectoryPathIgnored(directoryPath, context) {
+  let directoryPathIgnored = null;
+
+  directoryPath = stripRootDirectoryFromPath(directoryPath, context);  ///
+
+  if (directoryPath === EMPTY_STRING) {
+    directoryPathIgnored = false;
+  } else {
+    const { ignoredDirectoryPathMatchers, permittedDirectoryPathMatchers } = context,
+          string = directoryPath;  ///
 
     ignoredDirectoryPathMatchers.some((ignoredDirectoryPathMatcher) => {
       const matches = ignoredDirectoryPathMatcher.match(string);
 
       if (matches) {
-        ignored = true;
-      }
+        directoryPathIgnored = true;
 
-      if (ignored !== null) {
-        return true;
-      }
-    });
-  } else {
-    const { permittedFilePathMatchers, ignoredFilePathMatchers } = context,
-          string = path;  ///
-
-    permittedFilePathMatchers.some((permittedFilePathMatcher) => {
-      const matches = permittedFilePathMatcher.match(string);
-
-      if (matches) {
-        ignored = false;
-      }
-
-      if (ignored !== null) {
         return true;
       }
     });
 
-    ignoredFilePathMatchers.some((ignoredFilePathMatcher) => {
-      const matches = ignoredFilePathMatcher.match(string);
+    permittedDirectoryPathMatchers.some((permittedDirectoryPathMatcher) => {
+      const matches = permittedDirectoryPathMatcher.match(string);
 
       if (matches) {
-        ignored = true;
-      }
+        directoryPathIgnored = false;
 
-      if (ignored !== null) {
         return true;
       }
     });
   }
 
-  return ignored;
+  return directoryPathIgnored;
 }
 
-module.exports = synchronousIsIgnored;
+module.exports = {
+  synchronousIsFilePathIgnored,
+  synchronousIsDirectoryPathIgnored
+};

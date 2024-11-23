@@ -2,92 +2,109 @@
 
 const { fileSystemUtilities } = require("necessary");
 
-const synchronousIsIgnored = require("../isIgnored/synchronous"),
-      asynchronousIsIgnored = require("../isIgnored/asynchronous");
-
-const { CURRENT_DIRECTORY_PATH } = require("../constants"),
-      { pathFromSubEntryNameAndDirectoryPath } = require("../utilities/path");
+const { subEntryPathsFromSubEntryNamesAndDirectoryPath } = require("../utilities/path"),
+      { synchronousIsFilePathIgnored, synchronousIsDirectoryPathIgnored } = require("../isIgnored/synchronous"),
+      { asynchronousIsFilePathIgnored, asynchronousIsDirectoryPathIgnored } = require("../isIgnored/asynchronous");
 
 const { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
 function processPathsOperation(proceed, abort, context) {
-  const directoryPath = CURRENT_DIRECTORY_PATH,
+  const { rootDirectoryPaths } = context,
+        subEntryPaths = [
+          ...rootDirectoryPaths
+        ],
         done = proceed, ///
-        synchronous = processDirectoryPath(directoryPath, done, context);
+        synchronous = processSubEntryPaths(subEntryPaths, done, context);
 
   if (synchronous) {
-    done();
+    proceed();
   }
 }
 
 module.exports = processPathsOperation;
 
-function processDirectoryPath(directoryPath, done, context) {
-  const subEntryNames = readDirectory(directoryPath),
-        synchronous = processSubEntryNames(subEntryNames, directoryPath, done, context);
-
-  return synchronous;
-}
-
-function processSubEntryNames(subEntryNames, directoryPath, done, context) {
+function processSubEntryPaths(subEntryPaths, done, context) {
   let synchronous = true;
 
   let subEntryNamesLength;
 
-  subEntryNamesLength = subEntryNames.length;
+  subEntryNamesLength = subEntryPaths.length;
 
   while (subEntryNamesLength > 0) {
-    const subEntryName = subEntryNames.shift();
+    const subEntryPath = subEntryPaths.shift();
 
-    synchronous = processSubEntryName(subEntryName, subEntryNames, directoryPath, done, context);
+    synchronous = processSubEntryPath(subEntryPath, subEntryPaths, done, context);
 
     if (!synchronous) {
       break;
     }
 
-    subEntryNamesLength = subEntryNames.length;
+    subEntryNamesLength = subEntryPaths.length;
   }
 
   return synchronous;
 }
 
-function processSubEntryName(subEntryName, subEntryNames, directoryPath, done, context) {
+function processSubEntryPath(subEntryPath, subEntryPaths, done, context) {
   let synchronous;
 
-  const path = pathFromSubEntryNameAndDirectoryPath(subEntryName, directoryPath),
-        directory = isEntryDirectory(path),
-        ignored = synchronousIsIgnored(path, directory, context);
+  const path = subEntryPath,
+        directory = isEntryDirectory(path);
 
-  if (ignored !== null) {
+  if (directory) {
+    const directoryPath = subEntryPath; ///
+
+    synchronous = processDirectoryPath(directoryPath, () => {
+      const synchronous = processSubEntryPaths(subEntryPaths, done, context);
+
+      if (synchronous) {
+        done();
+      }
+    }, context);
+  } else {
+    const filePath = subEntryPath;  ///
+
+    synchronous = processFilePath(filePath, () => {
+      const synchronous = processSubEntryPaths(subEntryPaths, done, context);
+
+      if (synchronous) {
+        done();
+      }
+    }, context);
+  }
+
+  if (synchronous) {
+    synchronous = processSubEntryPaths(subEntryPaths, done, context);
+  }
+
+  return synchronous;
+}
+
+function processDirectoryPath(directoryPath, done, context) {
+  let synchronous;
+
+  const directoryPathIgnored = synchronousIsDirectoryPathIgnored(directoryPath, context);
+
+  if (directoryPathIgnored !== null) {
     synchronous = true;
 
-    if (!ignored) {
-      if (directory) {
-        const directoryPath = path; ///
+    if (!directoryPathIgnored) {
+      const subEntryNames = readDirectory(directoryPath),
+            subEntryPaths = subEntryPathsFromSubEntryNamesAndDirectoryPath(subEntryNames, directoryPath);
 
-        synchronous = processDirectoryPath(directoryPath, done, context);
-      } else {
-        const filePath = path;  ///
-
-        processFilePath(filePath, context);
-      }
+      synchronous = processSubEntryPaths(subEntryPaths, done, context);
     }
   } else {
     synchronous = false;
 
-    asynchronousIsIgnored(path, directory, context, (ignored) => {
-      if (ignored === null) {
-        done();
+    asynchronousIsDirectoryPathIgnored(directoryPath, context, (directoryPathIgnored) => {
+      let synchronous = true;
 
-        return;
-      }
+      if (!directoryPathIgnored) {
+        const subEntryNames = readDirectory(directoryPath),
+              subEntryPaths = subEntryPathsFromSubEntryNamesAndDirectoryPath(subEntryNames, directoryPath);
 
-      let synchronous;
-
-      synchronous = processSubEntryName(subEntryName, subEntryNames, directoryPath, done, context);
-
-      if (synchronous) {
-        synchronous = processSubEntryNames(subEntryNames, directoryPath, done, context);
+        synchronous = processSubEntryPaths(subEntryPaths, done, context);
       }
 
       if (synchronous) {
@@ -99,6 +116,28 @@ function processSubEntryName(subEntryName, subEntryNames, directoryPath, done, c
   return synchronous;
 }
 
-function processFilePath(filePath, context) {
-  console.log(`Processed the '${filePath}' file.`)
+function processFilePath(filePath, done, context) {
+  let synchronous;
+
+  const filePathIgnored = synchronousIsFilePathIgnored(filePath, context);
+
+  if (filePathIgnored !== null) {
+    synchronous = true;
+
+    if (!filePathIgnored) {
+      console.log(`Processed the '${filePath}' file.`)
+    }
+  } else {
+    synchronous = false;
+
+    asynchronousIsFilePathIgnored(filePath, context, (filePathIgnored) => {
+      if (!filePathIgnored) {
+        console.log(`Processed the '${filePath}' file.`)
+      }
+
+      done();
+    });
+  }
+
+  return synchronous;
 }
