@@ -1,6 +1,6 @@
 "use strict";
 
-const addMatcherOperation = require("../operation/addMatcher"),
+const updatePathMatchersOperation = require("../operation/updatePatMatchers"),
       globRegexOrStringPromptOperation = require("../operation/prompt/globRegexOrString"),
       ignoreOrPermitPathPromptOperation = require("../operation/prompt/ignoreOrPermitPath");
 
@@ -42,7 +42,7 @@ function asynchronousIsPathIgnored(path, directory, context, callback) {
   const operations = [
           ignoreOrPermitPathPromptOperation,
           globRegexOrStringPromptOperation,
-          addMatcherOperation
+          updatePathMatchersOperation
         ],
         glob = null,
         regex = null,

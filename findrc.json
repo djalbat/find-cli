@@ -1,0 +1,10 @@
+{
+  "version": "1.3",
+  "ignoredFilePathMatchers": [],
+  "permittedFilePathMatchers": [],
+  "ignoredDirectoryPathMatchers": [],
+  "permittedDirectoryPathMatchers": [],
+  "rootDirectoryPaths": [
+    "./"
+  ]
+}

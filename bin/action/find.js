@@ -1,8 +1,7 @@
 "use strict";
 
 const processPathsOperation = require("../operation/processPaths"),
-      readConfigurationOperation = require("../operation/readConfiguration"),
-      writeConfigurationOperation = require("../operation/writeConfiguration");
+      readConfigurationOperation = require("../operation/readConfiguration");
 
 const { executeOperations } = require("../utilities/operation"),
       { FAILED_FIND_MESSAGE, SUCCESSFUL_FIND_MESSAGE } = require("../messages");
@@ -10,8 +9,7 @@ const { executeOperations } = require("../utilities/operation"),
 function findAction(string, quietly) {
   const operations = [
           readConfigurationOperation,
-          processPathsOperation,
-          writeConfigurationOperation
+          processPathsOperation
         ],
         context = {
           string,

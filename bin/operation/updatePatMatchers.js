@@ -4,7 +4,12 @@ const GlobMatcher = require("../matcher/glob"),
       RegexMatcher = require("../matcher/regex"),
       StringMatcher = require("../matcher/string");
 
-function addMatcherOperation(proceed, abort, context) {
+const { updateIgnoredFilePathMatchers,
+        updatePermittedFilePathMatchers,
+        updateIgnoredDirectoryPathMatchers,
+        updatePermittedDirectoryPathMatchers } = require("../configuration");
+
+function updatePathMatcherOperation(proceed, abort, context) {
   const { glob, regex, string, directory, pathIgnored } = context;
 
   pathIgnored ?
@@ -14,7 +19,7 @@ function addMatcherOperation(proceed, abort, context) {
   proceed();
 }
 
-module.exports = addMatcherOperation;
+module.exports = updatePathMatcherOperation;
 
 function addIgnoreMatcher(glob, regex, string, directory, context) {
   if (directory) {
@@ -23,12 +28,16 @@ function addIgnoreMatcher(glob, regex, string, directory, context) {
           ignoredDirectoryPathMatcher = matcher;  ///
 
     ignoredDirectoryPathMatchers.push(ignoredDirectoryPathMatcher);
+
+    updateIgnoredDirectoryPathMatchers(ignoredDirectoryPathMatchers);
   } else {
     const { ignoredFilePathMatchers } = context,
           matcher = matcherFromGlobRegexOrString(glob, regex, string),
           ignoredFilePathMatcher = matcher;  ///
 
     ignoredFilePathMatchers.push(ignoredFilePathMatcher);
+
+    updateIgnoredFilePathMatchers(ignoredFilePathMatchers);
   }
 }
 
@@ -39,12 +48,16 @@ function addPermitMatcher(glob, regex, string, directory, context) {
           permittedDirectoryPathMatcher = matcher;  ///
 
     permittedDirectoryPathMatchers.push(permittedDirectoryPathMatcher);
+
+    updatePermittedDirectoryPathMatchers(permittedDirectoryPathMatchers);
   } else {
     const { permittedFilePathMatchers } = context,
           matcher = matcherFromGlobRegexOrString(glob, regex, string),
           permittedFilePathMatcher = matcher;  ///
 
     permittedFilePathMatchers.push(permittedFilePathMatcher);
+
+    updatePermittedFilePathMatchers(permittedFilePathMatchers);
   }
 }
 
