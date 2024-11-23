@@ -113,14 +113,12 @@ function processFilePath(filePath, callback, context) {
   } else {
     synchronous = false;
 
-    asynchronousIsFilePathIgnored(filePath, context, (filePathIgnored) => {
-      const synchronous = (filePathIgnored !== null) ?
+    asynchronousIsFilePathIgnored(filePath, context, (pathIgnored) => {
+      const synchronous = (pathIgnored !== null) ?
                             processFilePath(filePath, callback, context) :
                               true;
 
       if (synchronous) {
-        const pathIgnored = filePathIgnored;  ///
-
         callback(pathIgnored);
       }
     });
@@ -164,14 +162,12 @@ function processDirectoryPath(directoryPath, callback, context) {
   } else {
     synchronous = false;
 
-    asynchronousIsDirectoryPathIgnored(directoryPath, context, (directoryPathIgnored) => {
-      const synchronous = (directoryPathIgnored !== null) ?
+    asynchronousIsDirectoryPathIgnored(directoryPath, context, (pathIgnored) => {
+      const synchronous = (pathIgnored !== null) ?
                             processDirectoryPath(directoryPath, callback, context) :
                               true;
 
       if (synchronous) {
-        const pathIgnored = directoryPathIgnored; ///
-
         callback(pathIgnored);
       }
     });

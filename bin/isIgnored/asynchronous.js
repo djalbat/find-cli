@@ -13,11 +13,7 @@ function asynchronousIsFilePathIgnored(filePath, context, callback) {
   const path = filePath,  ///
         directory = false;
 
-  asynchronousIsPathIgnored(path, directory, context, (pathIgnored) => {
-    const filePathIgnored = pathIgnored;  ///
-
-    callback(filePathIgnored);
-  });
+  asynchronousIsPathIgnored(path, directory, context, callback);
 }
 
 function asynchronousIsDirectoryPathIgnored(directoryPath, context, callback) {
@@ -26,11 +22,7 @@ function asynchronousIsDirectoryPathIgnored(directoryPath, context, callback) {
   const path = directoryPath,  ///
         directory = true;
 
-  asynchronousIsPathIgnored(path, directory, context, (pathIgnored) => {
-    const directoryPathIgnored = pathIgnored; ///
-
-    callback(directoryPathIgnored);
-  });
+  asynchronousIsPathIgnored(path, directory, context, callback);
 }
 
 module.exports = {

@@ -57,7 +57,7 @@ function synchronousIsDirectoryPathIgnored(directoryPath, context) {
     directoryPathIgnored = false;
   } else {
     const { ignoredDirectoryPathMatchers, permittedDirectoryPathMatchers } = context,
-          string = directoryPath;  ///
+          string = `${directoryPath}/`;  ///
 
     ignoredDirectoryPathMatchers.some((ignoredDirectoryPathMatcher) => {
       const matches = ignoredDirectoryPathMatcher.match(string);
