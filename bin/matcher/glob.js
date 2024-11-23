@@ -34,6 +34,12 @@ class GlobMatcher {
     return matches;
   }
 
+  asString() {
+    const string = this.glob; ///
+
+    return string;
+  }
+
   static fromJSON(json) {
     let globMatcher = null;
 
@@ -53,10 +59,12 @@ class GlobMatcher {
   static fromGlob(glob) {
     let globMatcher = null;
 
-    const regex = regexFromGlob(glob);
+    if (glob !== null) {
+      const regex = regexFromGlob(glob);
 
-    if (regex !== null) {
-      globMatcher = new GlobMatcher(glob, regex);
+      if (regex !== null) {
+        globMatcher = new GlobMatcher(glob, regex);
+      }
     }
 
     return globMatcher;

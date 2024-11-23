@@ -1,6 +1,7 @@
 "use strict";
 
-const { REGEX_TYPE } = require("../types");
+const { REGEX_TYPE } = require("../types"),
+      { stripSlashedFromPattern } = require("../utilities/pattern");
 
 class RegexMatcher {
   constructor(regex) {
@@ -13,10 +14,10 @@ class RegexMatcher {
 
   toJSON() {
     const type = REGEX_TYPE,
-          regex = this.regex,
+          pattern = this.asPattern(),
           json = {
             type,
-            regex
+            pattern
           };
 
     return json;
@@ -28,10 +29,22 @@ class RegexMatcher {
     return matches;
   }
 
-  static fromRegex(regex) {
-    const regexMatcher = new RegexMatcher(regex);
+  asString() {
+    const string = this.regex.toString();
 
-    return regexMatcher;
+    return string;
+  }
+
+  asPattern() {
+    let pattern;
+
+    const string = this.asString();
+
+    pattern = string; ///
+
+    pattern = stripSlashedFromPattern(pattern); ///
+
+    return pattern;
   }
 
   static fromJSON(json) {
@@ -40,13 +53,20 @@ class RegexMatcher {
     const { type } = json;
 
     if (type === REGEX_TYPE) {
-      let { regex } = json;
+      const { pattern } = json,
+            regExp = new RegExp(pattern),
+            regex = regExp; ///
 
-      const string = regex, ///
-            regExp = new RegExp(string);
+      regexMatcher = new RegexMatcher(regex);
+    }
 
-      regex = regExp; ///
+    return regexMatcher;
+  }
 
+  static fromRegex(regex) {
+    let regexMatcher = null;
+
+    if (regex !== null) {
       regexMatcher = new RegexMatcher(regex);
     }
 

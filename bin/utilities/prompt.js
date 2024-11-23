@@ -1,6 +1,7 @@
 "use strict";
 
-const { regexFromGlob } = require("../utilities/glob");
+const { regexFromGlob } = require("../utilities/glob"),
+      { stripSlashedFromPattern } = require("./pattern");
 
 const regexRegex = /^\/.*?\/$/,
       stringRegex = /^".*?"$/;
@@ -32,7 +33,7 @@ function regexFromAnswer(answer) {
 
   if (matches) {
     try {
-      const pattern = answer, ///
+      const pattern =patternFromAnswer(answer), ///
             regExp = new RegExp(pattern);
 
       regex = regExp; ///
@@ -55,6 +56,16 @@ function stringFromAnswer(answer) {
   }
 
   return string;
+}
+
+function patternFromAnswer(answer) {
+  let pattern;
+
+  pattern = answer; ///
+
+  pattern = stripSlashedFromPattern(pattern);
+
+  return pattern;
 }
 
 module.exports = {

@@ -25,25 +25,34 @@ function stripRootDirectoryFromPath(path, context) {
   return path;
 }
 
-function subEntryPathsFromSubEntryNamesAndDirectoryPath(subEntryNames, directoryPath) {
-  const subEntryPaths = subEntryNames.map((subEntryName) => {
-    const subEntryPath = subEntryPathFromSubEntryNameAndDirectoryPath(subEntryName, directoryPath);
+function isDirectoryPathRootDirectoryPath(directoryPath, context) {
+  const { rootDirectoryPaths } = context,
+        rootDirectoryPathsIncludesDirectoryPath = rootDirectoryPaths.includes(directoryPath),
+        directoryPathRootDirectoryPath = rootDirectoryPathsIncludesDirectoryPath; ///
 
-    return subEntryPath
+  return directoryPathRootDirectoryPath;
+}
+
+function entryPathsFromEntryNamesAndDirectoryPath(entryNames, directoryPath) {
+  const entryPaths = entryNames.map((entryName) => {
+    const entryPath = entryPathFromEntryNameAndDirectoryPath(entryName, directoryPath);
+
+    return entryPath
   });
 
-  return subEntryPaths;
+  return entryPaths;
 }
 
 module.exports = {
   stripRootDirectoryFromPath,
-  subEntryPathsFromSubEntryNamesAndDirectoryPath
+  isDirectoryPathRootDirectoryPath,
+  entryPathsFromEntryNamesAndDirectoryPath
 };
 
-function subEntryPathFromSubEntryNameAndDirectoryPath(subEntryName, directoryPath) {
-  const subEntryPath = (directoryPath === CURRENT_DIRECTORY_PATH) ?
-                         subEntryName : ///
-                           concatenatePaths(directoryPath, subEntryName);
+function entryPathFromEntryNameAndDirectoryPath(entryName, directoryPath) {
+  const entryPath = (directoryPath === CURRENT_DIRECTORY_PATH) ?
+                         entryName : ///
+                           concatenatePaths(directoryPath, entryName);
 
-  return subEntryPath;
+  return entryPath;
 }

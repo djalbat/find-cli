@@ -28,6 +28,10 @@ class StringMatcher {
     return matches;
   }
 
+  asString() {
+    return this.string;
+  }
+
   static fromJSON(json) {
     let stringMatcher = null;
 
@@ -43,7 +47,11 @@ class StringMatcher {
   }
 
   static fromString(string) {
-    const stringMatcher = new StringMatcher(string);
+    let stringMatcher = null;
+
+    if (string !== null) {
+      stringMatcher = new StringMatcher(string);
+    }
 
     return stringMatcher;
   }

@@ -2,19 +2,20 @@
 
 const { fileSystemUtilities } = require("necessary");
 
-const { subEntryPathsFromSubEntryNamesAndDirectoryPath } = require("../utilities/path"),
+const { red, green, yellow } = require("../utilities/log"),
       { synchronousIsFilePathIgnored, synchronousIsDirectoryPathIgnored } = require("../isIgnored/synchronous"),
-      { asynchronousIsFilePathIgnored, asynchronousIsDirectoryPathIgnored } = require("../isIgnored/asynchronous");
+      { asynchronousIsFilePathIgnored, asynchronousIsDirectoryPathIgnored } = require("../isIgnored/asynchronous"),
+      { isDirectoryPathRootDirectoryPath, entryPathsFromEntryNamesAndDirectoryPath } = require("../utilities/path");
 
 const { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
 function processPathsOperation(proceed, abort, context) {
   const { rootDirectoryPaths } = context,
-        subEntryPaths = [
+        entryPaths = [  ///
           ...rootDirectoryPaths
         ],
         done = proceed, ///
-        synchronous = processSubEntryPaths(subEntryPaths, done, context);
+        synchronous = processEntryPaths(entryPaths, done, context);
 
   if (synchronous) {
     proceed();
@@ -23,49 +24,49 @@ function processPathsOperation(proceed, abort, context) {
 
 module.exports = processPathsOperation;
 
-function processSubEntryPaths(subEntryPaths, done, context) {
+function processEntryPaths(entryPaths, done, context) {
   let synchronous = true;
 
-  let subEntryNamesLength;
+  let entryNamesLength;
 
-  subEntryNamesLength = subEntryPaths.length;
+  entryNamesLength = entryPaths.length;
 
-  while (subEntryNamesLength > 0) {
-    const subEntryPath = subEntryPaths.shift();
+  while (entryNamesLength > 0) {
+    const entryPath = entryPaths.shift();
 
-    synchronous = processSubEntryPath(subEntryPath, subEntryPaths, done, context);
+    synchronous = processEntryPath(entryPath, entryPaths, done, context);
 
     if (!synchronous) {
       break;
     }
 
-    subEntryNamesLength = subEntryPaths.length;
+    entryNamesLength = entryPaths.length;
   }
 
   return synchronous;
 }
 
-function processSubEntryPath(subEntryPath, subEntryPaths, done, context) {
+function processEntryPath(entryPath, entryPaths, done, context) {
   let synchronous;
 
-  const path = subEntryPath,
+  const path = entryPath,
         directory = isEntryDirectory(path);
 
   if (directory) {
-    const directoryPath = subEntryPath; ///
+    const directoryPath = entryPath; ///
 
     synchronous = processDirectoryPath(directoryPath, () => {
-      const synchronous = processSubEntryPaths(subEntryPaths, done, context);
+      const synchronous = processEntryPaths(entryPaths, done, context);
 
       if (synchronous) {
         done();
       }
     }, context);
   } else {
-    const filePath = subEntryPath;  ///
+    const filePath = entryPath;  ///
 
     synchronous = processFilePath(filePath, () => {
-      const synchronous = processSubEntryPaths(subEntryPaths, done, context);
+      const synchronous = processEntryPaths(entryPaths, done, context);
 
       if (synchronous) {
         done();
@@ -74,43 +75,7 @@ function processSubEntryPath(subEntryPath, subEntryPaths, done, context) {
   }
 
   if (synchronous) {
-    synchronous = processSubEntryPaths(subEntryPaths, done, context);
-  }
-
-  return synchronous;
-}
-
-function processDirectoryPath(directoryPath, done, context) {
-  let synchronous;
-
-  const directoryPathIgnored = synchronousIsDirectoryPathIgnored(directoryPath, context);
-
-  if (directoryPathIgnored !== null) {
-    synchronous = true;
-
-    if (!directoryPathIgnored) {
-      const subEntryNames = readDirectory(directoryPath),
-            subEntryPaths = subEntryPathsFromSubEntryNamesAndDirectoryPath(subEntryNames, directoryPath);
-
-      synchronous = processSubEntryPaths(subEntryPaths, done, context);
-    }
-  } else {
-    synchronous = false;
-
-    asynchronousIsDirectoryPathIgnored(directoryPath, context, (directoryPathIgnored) => {
-      let synchronous = true;
-
-      if (!directoryPathIgnored) {
-        const subEntryNames = readDirectory(directoryPath),
-              subEntryPaths = subEntryPathsFromSubEntryNamesAndDirectoryPath(subEntryNames, directoryPath);
-
-        synchronous = processSubEntryPaths(subEntryPaths, done, context);
-      }
-
-      if (synchronous) {
-        done();
-      }
-    });
+    synchronous = processEntryPaths(entryPaths, done, context);
   }
 
   return synchronous;
@@ -124,18 +89,80 @@ function processFilePath(filePath, done, context) {
   if (filePathIgnored !== null) {
     synchronous = true;
 
+    const { matcherString } = context;
+
+    let message = filePathIgnored ?
+                    red(`Ignore ${filePath}`) :
+                      green(`Permit ${filePath}`);
+
+    message = `${message} ${matcherString}`;
+
+    console.log(message);
+
     if (!filePathIgnored) {
-      console.log(`Processed the '${filePath}' file.`)
+      console.log(yellow(`Processing the '${filePath}' file...`));
+
+      ///
     }
   } else {
     synchronous = false;
 
     asynchronousIsFilePathIgnored(filePath, context, (filePathIgnored) => {
-      if (!filePathIgnored) {
-        console.log(`Processed the '${filePath}' file.`)
-      }
+      const synchronous = (filePathIgnored === null) ?
+                            true :
+                              processFilePath(filePath, done, context);
 
-      done();
+      if (synchronous) {
+        done();
+      }
+    });
+  }
+
+  return synchronous;
+}
+
+function processDirectoryPath(directoryPath, done, context) {
+  let synchronous;
+
+  const directoryPathIgnored = synchronousIsDirectoryPathIgnored(directoryPath, context),
+        directoryPathRootDirectoryPath = isDirectoryPathRootDirectoryPath(directoryPath, context);
+
+  if (directoryPathIgnored !== null) {
+    synchronous = true;
+
+    if (!directoryPathRootDirectoryPath) {
+      const { matcherString } = context;
+
+      let message = directoryPathIgnored ?
+                      red(`Ignore ${directoryPath}/`) :
+                        green(`Permit ${directoryPath}/`);
+
+      message = `${message} ${matcherString}`;
+
+      console.log(message);
+
+      if (!directoryPathIgnored) {
+        console.log(yellow(`Processing the '${directoryPath}' directory...`));
+      }
+    }
+
+    if (!directoryPathIgnored) {
+      const entryNames = readDirectory(directoryPath),
+            entryPaths = entryPathsFromEntryNamesAndDirectoryPath(entryNames, directoryPath);
+
+      synchronous = processEntryPaths(entryPaths, done, context);
+    }
+  } else {
+    synchronous = false;
+
+    asynchronousIsDirectoryPathIgnored(directoryPath, context, (directoryPathIgnored) => {
+      const synchronous = (directoryPathIgnored === null) ?
+                            true :
+                              processDirectoryPath(directoryPath, done, context);
+
+      if (synchronous) {
+        done();
+      }
     });
   }
 

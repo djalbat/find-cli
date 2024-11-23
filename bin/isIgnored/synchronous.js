@@ -15,6 +15,13 @@ function synchronousIsFilePathIgnored(filePath, context) {
     const matches = ignoredFilePathMatcher.match(string);
 
     if (matches) {
+      const matcher = ignoredFilePathMatcher, ///
+            matcherString = matcher.asString();
+
+      Object.assign(context, {
+        matcherString
+      });
+
       filePathIgnored = true;
 
       return true;
@@ -25,6 +32,13 @@ function synchronousIsFilePathIgnored(filePath, context) {
     const matches = permittedFilePathMatcher.match(string);
 
     if (matches) {
+      const matcher = permittedFilePathMatcher, ///
+            matcherString = matcher.asString();
+
+      Object.assign(context, {
+        matcherString
+      });
+
       filePathIgnored = false;
 
       return true;
@@ -49,6 +63,13 @@ function synchronousIsDirectoryPathIgnored(directoryPath, context) {
       const matches = ignoredDirectoryPathMatcher.match(string);
 
       if (matches) {
+        const matcher = ignoredDirectoryPathMatcher, ///
+              matcherString = matcher.asString();
+
+        Object.assign(context, {
+          matcherString
+        });
+
         directoryPathIgnored = true;
 
         return true;
@@ -59,6 +80,13 @@ function synchronousIsDirectoryPathIgnored(directoryPath, context) {
       const matches = permittedDirectoryPathMatcher.match(string);
 
       if (matches) {
+        const matcher = permittedDirectoryPathMatcher, ///
+              matcherString = matcher.asString();
+
+        Object.assign(context, {
+          matcherString
+        });
+
         directoryPathIgnored = false;
 
         return true;
