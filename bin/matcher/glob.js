@@ -1,35 +1,36 @@
 "use strict";
 
 const { GLOB_TYPE } = require("../types"),
-      { regexFromGlob } = require("../utilities/glob");
+      { patternFromGlobAndDirectory } = require("../utilities/matcher");
 
 class GlobMatcher {
-  constructor(glob, regex) {
+  constructor(glob, pattern) {
     this.glob = glob;
-    this.regex = regex;
+    this.pattern = pattern;
   }
 
   getGlob() {
     return this.glob;
   }
 
-  getRegex() {
-    return this.regex;
+  getPattern() {
+    return this.pattern;
   }
 
   toJSON() {
     const type = GLOB_TYPE,
-          glob = this.glob,
+          pattern = this.pattern,
           json = {
             type,
-            glob
+            pattern
           };
 
     return json;
   }
 
   match(string) {
-    const matches = this.regex.test(string);
+    const regExp = new RegExp(this.pattern),
+          matches = regExp.test(string);
 
     return matches;
   }
@@ -46,24 +47,22 @@ class GlobMatcher {
     const { type } = json;
 
     if (type === GLOB_TYPE) {
-      let { glob } = json;
+      const { glob, pattern } = json;
 
-      const regex = regexFromGlob(glob);
-
-      globMatcher = new GlobMatcher(glob, regex);
+      globMatcher = new GlobMatcher(glob, pattern);
     }
 
     return globMatcher;
   }
 
-  static fromGlob(glob) {
+  static fromGlobAndDirectory(glob, directory) {
     let globMatcher = null;
 
     if (glob !== null) {
-      const regex = regexFromGlob(glob);
+      const pattern = patternFromGlobAndDirectory(glob, directory);
 
-      if (regex !== null) {
-        globMatcher = new GlobMatcher(glob, regex);
+      if (pattern !== null) {
+        globMatcher = new GlobMatcher(glob, pattern);
       }
     }
 

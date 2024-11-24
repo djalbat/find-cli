@@ -1,29 +1,42 @@
 "use strict";
 
-const { STRING_TYPE } = require("../types");
+const { STRING_TYPE } = require("../types"),
+      { stringFromStringAndDirectory } = require("../utilities/matcher"),
+      { addDoubleQuotes, removeDoubleQuotes } = require("../utilities/literal");
 
 class StringMatcher {
-  constructor(string) {
+  constructor(string, directory) {
     this.string = string;
+    this.directory = directory;
   }
 
   getString() {
     return this.string;
   }
 
+  getDirectory() {
+    return this.directory;
+  }
+
   toJSON() {
     const type = STRING_TYPE,
           string = this.string,
+          directory = this.directory,
           json = {
             type,
-            string
+            string,
+            directory
           };
 
     return json;
   }
 
   match(string) {
+    this.string = removeDoubleQuotes(this.string);  ///
+
     const matches = (this.string === string);
+
+    this.string = addDoubleQuotes(this.string); ///
 
     return matches;
   }
@@ -38,19 +51,21 @@ class StringMatcher {
     const { type } = json;
 
     if (type === STRING_TYPE) {
-      const { string } = json;
+      const { string, directory } = json;
 
-      stringMatcher = new StringMatcher(string);
+      stringMatcher = new StringMatcher(string, directory);
     }
 
     return stringMatcher;
   }
 
-  static fromString(string) {
+  static fromStringAndDirectory(string, directory) {
     let stringMatcher = null;
 
     if (string !== null) {
-      stringMatcher = new StringMatcher(string);
+      string = stringFromStringAndDirectory(string, directory); ///
+
+      stringMatcher = new StringMatcher(string, directory);
     }
 
     return stringMatcher;

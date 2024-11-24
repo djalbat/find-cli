@@ -1,6 +1,7 @@
 "use strict";
 
 const { EMPTY_STRING } = require("../constants"),
+      { addTrailingForwardSlash } = require("../utilities/literal"),
       { stripRootDirectoryFromPath } = require("../utilities/path");
 
 function synchronousIsFilePathIgnored(filePath, context) {
@@ -57,7 +58,7 @@ function synchronousIsDirectoryPathIgnored(directoryPath, context) {
     directoryPathIgnored = false;
   } else {
     const { ignoredDirectoryPathMatchers, permittedDirectoryPathMatchers } = context,
-          string = `${directoryPath}/`;  ///
+          string = addTrailingForwardSlash(directoryPath);  ///
 
     ignoredDirectoryPathMatchers.some((ignoredDirectoryPathMatcher) => {
       const matches = ignoredDirectoryPathMatcher.match(string);

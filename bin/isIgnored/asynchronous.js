@@ -1,8 +1,8 @@
 "use strict";
 
 const updatePathMatchersOperation = require("../operation/updatePatMatchers"),
-      globRegexOrStringPromptOperation = require("../operation/prompt/globRegexOrString"),
-      ignoreOrPermitPathPromptOperation = require("../operation/prompt/ignoreOrPermitPath");
+      ignoreOrPermitPathPromptOperation = require("../operation/prompt/ignoreOrPermitPath"),
+      globStringOrPatternPromptOperation = require("../operation/prompt/globStringOrPattern");
 
 const { executeOperations } = require("../utilities/operation"),
       { stripRootDirectoryFromPath } = require("../utilities/path");
@@ -33,20 +33,20 @@ module.exports = {
 function asynchronousIsPathIgnored(path, directory, context, callback) {
   const operations = [
           ignoreOrPermitPathPromptOperation,
-          globRegexOrStringPromptOperation,
+          globStringOrPatternPromptOperation,
           updatePathMatchersOperation
         ],
         glob = null,
-        regex = null,
         string = null,
+        pattern = null,
         pathIgnored = null;
 
   Object.assign(context, {
     path,
     directory,
     glob,
-    regex,
     string,
+    pattern,
     pathIgnored
   });
 
@@ -56,8 +56,8 @@ function asynchronousIsPathIgnored(path, directory, context, callback) {
     delete context.path;
     delete context.directory;
     delete context.glob;
-    delete context.regex;
     delete context.string;
+    delete context.pattern;
     delete context.pathIgnored;
 
     callback(pathIgnored);

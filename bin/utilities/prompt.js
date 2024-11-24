@@ -1,76 +1,70 @@
 "use strict";
 
-const { regexFromGlob } = require("../utilities/glob"),
-      { stripSlashedFromPattern } = require("./pattern");
-
-const regexRegex = /^\/.*?\/$/,
-      stringRegex = /^".*?"$/;
+const { patternFromGlobAndDirectory, stringFromStringAndDirectory, patternFromPatternAndDirectory } = require("../utilities/matcher");
 
 function isAnswerIgnore(answer) { return /^(?:ignore|i)$/i.test(answer); }
 
-function globFromAnswer(answer) {
+function globFromAnswerAndDirectory(answer, directory) {
   let glob = null;
 
-  const matches = stringRegex.test(answer) || regexRegex.test(answer);
+  const answerGlob = isAnswerGlob(answer);
 
-  if (!matches) {
+  if (answerGlob) {
     glob = answer;  ///
 
-    const regex = regexFromGlob(glob);
+    const pattern = patternFromGlobAndDirectory(glob, directory);
 
-    if (regex === null) {
-      glob = null;
+    if (pattern !== null) {
+      glob = answer;  ///
     }
   }
 
   return glob;
 }
 
-function regexFromAnswer(answer) {
-  let regex = null;
-
-  const matches = regexRegex.test(answer);
-
-  if (matches) {
-    try {
-      const pattern =patternFromAnswer(answer), ///
-            regExp = new RegExp(pattern);
-
-      regex = regExp; ///
-    }
-    catch (error) {
-      ///
-    }
-  }
-
-  return regex;
-}
-
-function stringFromAnswer(answer) {
+function stringFromAnswerAndDirectory(answer, directory) {
   let string = null;
 
-  const matches = stringRegex.test(answer);
+  const answerString = isAnswerString(answer);
 
-  if (matches) {
+  if (answerString) {
     string = answer;  ///
+
+    string = stringFromStringAndDirectory(string, directory);  ///
   }
 
   return string;
 }
 
-function patternFromAnswer(answer) {
-  let pattern;
+function patternFromAnswerAndDirectory(answer, directory) {
+  let pattern = null;
 
-  pattern = answer; ///
+  const answerPattern = isAnswerPattern(answer);
 
-  pattern = stripSlashedFromPattern(pattern);
+  if (answerPattern) {
+    pattern = answer; ///
+
+    pattern = patternFromPatternAndDirectory(pattern, directory);  ///
+  }
 
   return pattern;
 }
 
 module.exports = {
   isAnswerIgnore,
-  globFromAnswer,
-  regexFromAnswer,
-  stringFromAnswer
+  globFromAnswerAndDirectory,
+  stringFromAnswerAndDirectory,
+  patternFromAnswerAndDirectory
 };
+
+function isAnswerGlob(answer) {
+  const answerPattern = isAnswerPattern(answer),
+        answerString = isAnswerString(answer),
+        answerGlob = (!answerPattern && !answerString);
+
+  return answerGlob;
+}
+
+function isAnswerString(answer) { return /^".*?"$/.test(answer); }
+
+function isAnswerPattern(answer) { return /^\/.*?\/$/.test(answer); }

@@ -1,20 +1,21 @@
 "use strict";
 
 const { REGEX_TYPE } = require("../types"),
-      { stripSlashedFromPattern } = require("../utilities/pattern");
+      { addForwardSlashes } = require("../utilities/literal"),
+      { patternFromPatternAndDirectory } = require("../utilities/matcher");
 
 class RegexMatcher {
-  constructor(regex) {
-    this.regex = regex;
+  constructor(pattern) {
+    this.pattern = pattern;
   }
 
-  getRegex() {
-    return this.regex;
+  getPattern() {
+    return this.pattern;
   }
 
   toJSON() {
     const type = REGEX_TYPE,
-          pattern = this.asPattern(),
+          pattern = this.pattern,
           json = {
             type,
             pattern
@@ -24,27 +25,16 @@ class RegexMatcher {
   }
 
   match(string) {
-    const matches = this.regex.test(string);
+    const regExp = new RegExp(this.pattern),
+          matches = regExp.test(string);
 
     return matches;
   }
 
   asString() {
-    const string = this.regex.toString();
+    const string = addForwardSlashes(this.pattern);  ///
 
     return string;
-  }
-
-  asPattern() {
-    let pattern;
-
-    const string = this.asString();
-
-    pattern = string; ///
-
-    pattern = stripSlashedFromPattern(pattern); ///
-
-    return pattern;
   }
 
   static fromJSON(json) {
@@ -53,21 +43,23 @@ class RegexMatcher {
     const { type } = json;
 
     if (type === REGEX_TYPE) {
-      const { pattern } = json,
-            regExp = new RegExp(pattern),
-            regex = regExp; ///
+      const { pattern } = json;
 
-      regexMatcher = new RegexMatcher(regex);
+      regexMatcher = new RegexMatcher(pattern);
     }
 
     return regexMatcher;
   }
 
-  static fromRegex(regex) {
+  static fromPatternAndDirectory(pattern, directory) {
     let regexMatcher = null;
 
-    if (regex !== null) {
-      regexMatcher = new RegexMatcher(regex);
+    if (pattern !== null) {
+      pattern = patternFromPatternAndDirectory(pattern, directory); ///
+
+      if (pattern !== null) {
+        regexMatcher = new RegexMatcher(pattern);
+      }
     }
 
     return regexMatcher;
