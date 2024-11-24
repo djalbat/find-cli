@@ -3,14 +3,18 @@
 const findAction = require("./action/find"),
       helpAction = require("./action/help"),
       versionAction = require("./action/version"),
-      initialiseAction = require("./action/initialise");
+      initialiseAction = require("./action/initialise"),
+      addRootDirectoryAction = require("./action/addRootDirectory"),
+      removeRootDirectoryAction = require("./action/removeRootDirectory");
 
 const { NO_ARGUMENT_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
       { DEFAULT_QUIETLY } = require("./defaults"),
       { FIND_COMMAND,
         HELP_COMMAND,
         VERSION_COMMAND,
-        INITIALISE_COMMAND } = require("./commands");
+        INITIALISE_COMMAND,
+        ADD_ROOT_DIRECTORY_COMMAND,
+        REMOVE_ROOT_DIRECTORY_COMMAND } = require("./commands");
 
 function main(command, argument, options) {
   const { quietly = DEFAULT_QUIETLY } = options;
@@ -42,6 +46,20 @@ function main(command, argument, options) {
 
         findAction(string, quietly);
       }
+
+      break;
+    }
+
+    case ADD_ROOT_DIRECTORY_COMMAND: {
+      const rootDirectory = argument; ///
+
+      addRootDirectoryAction(rootDirectory);
+
+      break;
+    }
+
+    case REMOVE_ROOT_DIRECTORY_COMMAND: {
+      removeRootDirectoryAction();
 
       break;
     }

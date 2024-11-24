@@ -32,6 +32,10 @@ Commands:
   version                                  Show the version
 
   initialise                               Create a configuration file
+
+  add-root-directory                       Add a root directory
+
+  remove-root-directory                    Remove a root directory
   
 Options:
 

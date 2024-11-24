@@ -95,18 +95,34 @@ function processFilePath(filePath, callback, context) {
   if (filePathIgnored !== null) {
     synchronous = true;
 
-    const { matcherString } = context;
+    const { quietly } = context;
 
-    let message = filePathIgnored ?
-                    red(`Ignore ${filePath}`) :
-                      green(`Permit ${filePath}`);
+    if (!quietly) {
+      const { matcherString } = context;
 
-    message = `${message} ${matcherString}`;
+      let message = filePathIgnored ?
+                      red(`Ignore ${filePath}`) :
+                        green(`Permit ${filePath}`);
 
-    console.log(message);
+      message = `${message} ${matcherString}`;
+
+      console.log(message);
+
+      if (!filePathIgnored) {
+        console.log(yellow(`Processing the '${filePath}' file...`));
+
+        ///
+      }
+    }
 
     if (!filePathIgnored) {
-      console.log(yellow(`Processing the '${filePath}' file...`));
+      let { totalFiles } = context;
+
+      totalFiles++;
+
+      Object.assign(context, {
+        totalFiles
+      });
 
       ///
     }
@@ -138,22 +154,34 @@ function processDirectoryPath(directoryPath, callback, context) {
     const directoryPathRootDirectoryPath = isDirectoryPathRootDirectoryPath(directoryPath, context);
 
     if (!directoryPathRootDirectoryPath) {
-      const { matcherString } = context;
+      const { quietly } = context;
 
-      let message = directoryPathIgnored ?
-                      red(`Ignore ${directoryPath}/`) :
-                        green(`Permit ${directoryPath}/`);
+      if (!quietly) {
+        const { matcherString } = context;
 
-      message = `${message} ${matcherString}`;
+        let message = directoryPathIgnored ?
+                        red(`Ignore ${directoryPath}/`) :
+                          green(`Permit ${directoryPath}/`);
 
-      console.log(message);
+        message = `${message} ${matcherString}`;
 
-      if (!directoryPathIgnored) {
-        console.log(yellow(`Processing the '${directoryPath}' directory...`));
+        console.log(message);
+
+        if (!directoryPathIgnored) {
+          console.log(yellow(`Processing the '${directoryPath}' directory...`));
+        }
       }
     }
 
     if (!directoryPathIgnored) {
+      let { totalDirectories } = context;
+
+      totalDirectories++;
+
+      Object.assign(context, {
+        totalDirectories
+      });
+
       const entryNames = readDirectory(directoryPath),
             entryPaths = entryPathsFromEntryNamesAndDirectoryPath(entryNames, directoryPath);
 

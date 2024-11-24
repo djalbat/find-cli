@@ -11,12 +11,23 @@ function findAction(string, quietly) {
           readConfigurationOperation,
           processPathsOperation
         ],
+        totalLines = 0,
+        totalFiles = 0,
+        totalDirectories = 0,
         context = {
           string,
-          quietly
+          quietly,
+          totalLines,
+          totalFiles,
+          totalDirectories
         };
 
   executeOperations(operations, (completed) => {
+    const { totalLines, totalFiles, totalDirectories } = context,
+          message = `A total of ${totalDirectories} directories, ${totalFiles} files and ${totalLines} lines searched.`;
+
+    console.log(message);
+
     if (!completed) {
       console.log(FAILED_FIND_MESSAGE);
 
