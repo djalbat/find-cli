@@ -1,6 +1,6 @@
 "use strict";
 
-const { patternFromGlobAndDirectory, stringFromStringAndDirectory, patternFromPatternAndDirectory } = require("../utilities/matcher");
+const { globFromGlobAndDirectory, stringFromStringAndDirectory, patternFromPatternAndDirectory } = require("../utilities/matcher");
 
 function isAnswerIgnore(answer) { return /^(?:ignore|i)$/i.test(answer); }
 
@@ -12,11 +12,7 @@ function globFromAnswerAndDirectory(answer, directory) {
   if (answerGlob) {
     glob = answer;  ///
 
-    const pattern = patternFromGlobAndDirectory(glob, directory);
-
-    if (pattern !== null) {
-      glob = answer;  ///
-    }
+    glob = globFromGlobAndDirectory(glob, directory);
   }
 
   return glob;

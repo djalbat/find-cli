@@ -44,7 +44,7 @@ function addIgnoreMatcher(glob, string, pattern, directory, context) {
 function addPermitMatcher(glob, string, pattern, directory, context) {
   if (directory) {
     const { permittedDirectoryPathMatchers } = context,
-          matcher = matcherFromGlobRegexOrString(glob, string, pattern, directory),
+          matcher = matcherFromGlobRegexOrString(glob, string, pattern),
           permittedDirectoryPathMatcher = matcher;  ///
 
     permittedDirectoryPathMatchers.push(permittedDirectoryPathMatcher);
@@ -52,7 +52,7 @@ function addPermitMatcher(glob, string, pattern, directory, context) {
     updatePermittedDirectoryPathMatchers(permittedDirectoryPathMatchers);
   } else {
     const { permittedFilePathMatchers } = context,
-          matcher = matcherFromGlobRegexOrString(glob, string, pattern, directory),
+          matcher = matcherFromGlobRegexOrString(glob, string, pattern),
           permittedFilePathMatcher = matcher;  ///
 
     permittedFilePathMatchers.push(permittedFilePathMatcher);
@@ -61,10 +61,10 @@ function addPermitMatcher(glob, string, pattern, directory, context) {
   }
 }
 
-function matcherFromGlobRegexOrString(glob, string, pattern, directory) {
-  const globMatcher = GlobMatcher.fromGlobAndDirectory(glob, directory),
-        regexMatcher = RegexMatcher.fromPatternAndDirectory(pattern, directory),
-        stringMatcher = StringMatcher.fromStringAndDirectory(string, directory),
+function matcherFromGlobRegexOrString(glob, string, pattern) {
+  const globMatcher = GlobMatcher.fromGlob(glob),
+        regexMatcher = RegexMatcher.fromPattern(pattern),
+        stringMatcher = StringMatcher.fromString(string),
         matcher = (globMatcher || regexMatcher || stringMatcher);
 
   return matcher;

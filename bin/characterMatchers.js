@@ -13,17 +13,17 @@ const periodCharacterMatcher = require("./characterMatcher/period"),
       repeatedDirectoriesCharacterMatcher = require("./characterMatcher/repeatedDirectories");
 
 const characterMatchers = [
-        repeatedDirectoriesCharacterMatcher,
-        singleDirectoryCharacterMatcher,
-        directoryCharacterMatcher,
-        repeatedWildcardCharacterMatcher,
-        singleWildcardCharacterMatcher,
-        escapedCharacterCharacterMatcher,
-        questionMarkCharacterMatcher,
-        periodCharacterMatcher,
-        alternatesCharacterMatcher,
-        characterClassCharacterMatcher,
-        defaultCharacterMatcher
-      ];
+  repeatedDirectoriesCharacterMatcher,
+  singleDirectoryCharacterMatcher,
+  directoryCharacterMatcher,
+  repeatedWildcardCharacterMatcher,
+  singleWildcardCharacterMatcher,
+  escapedCharacterCharacterMatcher,
+  questionMarkCharacterMatcher,
+  periodCharacterMatcher,
+  alternatesCharacterMatcher,
+  characterClassCharacterMatcher,
+  defaultCharacterMatcher
+];
 
 module.exports = characterMatchers;

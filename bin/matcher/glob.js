@@ -1,7 +1,7 @@
 "use strict";
 
 const { GLOB_TYPE } = require("../types"),
-      { patternFromGlobAndDirectory } = require("../utilities/matcher");
+      { patternFromGlob } = require("../utilities/matcher");
 
 class GlobMatcher {
   constructor(glob, pattern) {
@@ -19,9 +19,11 @@ class GlobMatcher {
 
   toJSON() {
     const type = GLOB_TYPE,
+          glob = this.glob,
           pattern = this.pattern,
           json = {
             type,
+            glob,
             pattern
           };
 
@@ -55,11 +57,11 @@ class GlobMatcher {
     return globMatcher;
   }
 
-  static fromGlobAndDirectory(glob, directory) {
+  static fromGlob(glob) {
     let globMatcher = null;
 
     if (glob !== null) {
-      const pattern = patternFromGlobAndDirectory(glob, directory);
+      const pattern = patternFromGlob(glob);
 
       if (pattern !== null) {
         globMatcher = new GlobMatcher(glob, pattern);

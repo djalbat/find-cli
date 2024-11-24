@@ -13,14 +13,8 @@ const { EMPTY_STRING } = require("../constants"),
         addTrailingEscapedForwardSlash,
         removeTrailingEscapedForwardSlash } = require("../utilities/literal");
 
-function patternFromGlobAndDirectory(glob, directory) {
+function patternFromGlob(glob) {
   let pattern = EMPTY_STRING;
-
-  glob = removeTrailingForwardSlash(glob);  ///
-
-  if (directory) {
-    glob = addTrailingForwardSlash(glob); ///
-  }
 
   const characters = [ ...glob ];
 
@@ -42,13 +36,25 @@ function patternFromGlobAndDirectory(glob, directory) {
 
   pattern = addAnchors(pattern);
 
-  try {
-    new RegExp(pattern);
-  } catch (error) {
-    pattern = null;
+  return pattern;
+}
+
+function globFromGlobAndDirectory(glob, directory) {
+  glob = removeTrailingForwardSlash(glob);  ///
+
+  if (directory) {
+    glob = addTrailingForwardSlash(glob); ///
   }
 
-  return pattern;
+  try {
+    const pattern = patternFromGlob(glob);
+
+    new RegExp(pattern);
+  } catch (error) {
+    glob = null;
+  }
+
+  return glob;
 }
 
 function stringFromStringAndDirectory(string, directory) {
@@ -88,7 +94,8 @@ function patternFromPatternAndDirectory(pattern, directory) {
 }
 
 module.exports = {
-  patternFromGlobAndDirectory,
+  patternFromGlob,
+  globFromGlobAndDirectory,
   stringFromStringAndDirectory,
   patternFromPatternAndDirectory
 };

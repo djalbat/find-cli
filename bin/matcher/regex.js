@@ -1,8 +1,7 @@
 "use strict";
 
 const { REGEX_TYPE } = require("../types"),
-      { addForwardSlashes } = require("../utilities/literal"),
-      { patternFromPatternAndDirectory } = require("../utilities/matcher");
+      { addForwardSlashes } = require("../utilities/literal");
 
 class RegexMatcher {
   constructor(pattern) {
@@ -51,15 +50,11 @@ class RegexMatcher {
     return regexMatcher;
   }
 
-  static fromPatternAndDirectory(pattern, directory) {
+  static fromPattern(pattern) {
     let regexMatcher = null;
 
     if (pattern !== null) {
-      pattern = patternFromPatternAndDirectory(pattern, directory); ///
-
-      if (pattern !== null) {
-        regexMatcher = new RegexMatcher(pattern);
-      }
+      regexMatcher = new RegexMatcher(pattern);
     }
 
     return regexMatcher;
