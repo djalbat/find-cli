@@ -4,7 +4,7 @@ const CharacterMatcher = require("../characterMatcher");
 
 class SingleWildcardCharacterMatcher extends CharacterMatcher {
   callback(characters) {
-    const result = `.*?`;  ///
+    const result = `.+?`;
 
     return result;
   }
