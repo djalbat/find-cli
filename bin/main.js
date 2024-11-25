@@ -9,7 +9,7 @@ const findAction = require("./action/find"),
       removeRootDirectoryPathAction = require("./action/removeRootDirectoryPath");
 
 const { NO_ARGUMENT_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
-      { DEFAULT_QUIETLY } = require("./defaults"),
+      { DEFAULT_DRY_RUN, DEFAULT_QUIETLY } = require("./defaults"),
       { FIND_COMMAND,
         HELP_COMMAND,
         VERSION_COMMAND,
@@ -19,7 +19,7 @@ const { NO_ARGUMENT_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require(".
         REMOVE_ROOT_DIRECTORY_PATH_COMMAND } = require("./commands");
 
 function main(command, argument, options) {
-  const { quietly = DEFAULT_QUIETLY } = options;
+  const { dryRun = DEFAULT_DRY_RUN, quietly = DEFAULT_QUIETLY } = options;
 
   switch (command) {
     case HELP_COMMAND: {
@@ -68,7 +68,7 @@ function main(command, argument, options) {
       } else {
         const string = argument;  ///
 
-        findAction(string, quietly);
+        findAction(string, dryRun, quietly);
       }
 
       break;

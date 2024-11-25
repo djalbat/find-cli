@@ -2,17 +2,18 @@
 
 const { versionUtilities, configurationUtilities } = require("necessary");
 
-const GlobMatcher = require("./matcher/glob"),
-      RegexMatcher = require("./matcher/regex"),
-      StringMatcher = require("./matcher/string");
+const GlobRule = require("./rule/glob"),
+      RegexRule = require("./rule/regex"),
+      StringRule = require("./rule/string");
 
 const { FIND } = require("./constants"),
-      { createConfiguration } = require("./configuration/version_1_2"),
+      { createConfiguration } = require("./configuration/version_1_4"),
       { migrateConfigurationToVersion_1_1 } = require("./configuration/version_1_1"),
       { migrateConfigurationToVersion_1_2 } = require("./configuration/version_1_2"),
       { migrateConfigurationToVersion_1_3 } = require("./configuration/version_1_3"),
+      { migrateConfigurationToVersion_1_4 } = require("./configuration/version_1_4"),
       { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages"),
-      { VERSION_1_0, VERSION_1_1, VERSION_1_2, VERSION_1_3 } = require("./versions");
+      { VERSION_1_0, VERSION_1_1, VERSION_1_2, VERSION_1_3, VERSION_1_4 } = require("./versions");
 
 const { rc } = configurationUtilities,
       { migrate } = versionUtilities,
@@ -27,52 +28,52 @@ function retrieveRootDirectoryPaths() {
   return rootDirectoryPaths;
 }
 
-function retrieveIgnoredFilePathMatchers() {
+function retrieveIgnoredFilePathRules() {
   const configuration = readConfigurationFile();
 
-  let { ignoredFilePathMatchers } = configuration;
+  let { ignoredFilePathRules } = configuration;
 
-  const ignoredFilePathMatchersJSON = ignoredFilePathMatchers;  ///
+  const ignoredFilePathRulesJSON = ignoredFilePathRules;  ///
 
-  ignoredFilePathMatchers = matchersFromPathMatchersJSON(ignoredFilePathMatchersJSON);
+  ignoredFilePathRules = rulesFromPathRulesJSON(ignoredFilePathRulesJSON);
 
-  return ignoredFilePathMatchers;
+  return ignoredFilePathRules;
 }
 
-function retrievePermittedFilePathMatchers() {
+function retrievePermittedFilePathRules() {
   const configuration = readConfigurationFile();
 
-  let { permittedFilePathMatchers } = configuration;
+  let { permittedFilePathRules } = configuration;
 
-  const permittedFilePathMatchersJSON = permittedFilePathMatchers;  ///
+  const permittedFilePathRulesJSON = permittedFilePathRules;  ///
 
-  permittedFilePathMatchers = matchersFromPathMatchersJSON(permittedFilePathMatchersJSON);
+  permittedFilePathRules = rulesFromPathRulesJSON(permittedFilePathRulesJSON);
 
-  return permittedFilePathMatchers;
+  return permittedFilePathRules;
 }
 
-function retrieveIgnoredDirectoryPathMatchers() {
+function retrieveIgnoredDirectoryPathRules() {
   const configuration = readConfigurationFile();
 
-  let { ignoredDirectoryPathMatchers } = configuration;
+  let { ignoredDirectoryPathRules } = configuration;
 
-  const ignoredDirectoryPathMatchersJSON = ignoredDirectoryPathMatchers;  ///
+  const ignoredDirectoryPathRulesJSON = ignoredDirectoryPathRules;  ///
 
-  ignoredDirectoryPathMatchers = matchersFromPathMatchersJSON(ignoredDirectoryPathMatchersJSON);
+  ignoredDirectoryPathRules = rulesFromPathRulesJSON(ignoredDirectoryPathRulesJSON);
 
-  return ignoredDirectoryPathMatchers;
+  return ignoredDirectoryPathRules;
 }
 
-function retrievePermittedDirectoryPathMatchers() {
+function retrievePermittedDirectoryPathRules() {
   const configuration = readConfigurationFile();
 
-  let { permittedDirectoryPathMatchers } = configuration;
+  let { permittedDirectoryPathRules } = configuration;
 
-  const permittedDirectoryPathMatchersJSON = permittedDirectoryPathMatchers;  ///
+  const permittedDirectoryPathRulesJSON = permittedDirectoryPathRules;  ///
 
-  permittedDirectoryPathMatchers = matchersFromPathMatchersJSON(permittedDirectoryPathMatchersJSON);
+  permittedDirectoryPathRules = rulesFromPathRulesJSON(permittedDirectoryPathRulesJSON);
 
-  return permittedDirectoryPathMatchers;
+  return permittedDirectoryPathRules;
 }
 
 function updateRootDirectoryPaths(rootDirectoryPaths) {
@@ -81,43 +82,43 @@ function updateRootDirectoryPaths(rootDirectoryPaths) {
   });
 }
 
-function updateIgnoredFilePathMatchers(ignoredFilePathMatchers) {
-  const ignoredFilePathMatchersJSON = matchersJSONFromMatchers(ignoredFilePathMatchers);
+function updateIgnoredFilePathRules(ignoredFilePathRules) {
+  const ignoredFilePathRulesJSON = rulesJSONFromRules(ignoredFilePathRules);
 
-  ignoredFilePathMatchers = ignoredFilePathMatchersJSON;  ///
+  ignoredFilePathRules = ignoredFilePathRulesJSON;  ///
 
   updateConfigurationFile({
-    ignoredFilePathMatchers
+    ignoredFilePathRules
   });
 }
 
-function updatePermittedFilePathMatchers(permittedFilePathMatchers) {
-  const permittedFilePathMatchersJSON = matchersJSONFromMatchers(permittedFilePathMatchers);
+function updatePermittedFilePathRules(permittedFilePathRules) {
+  const permittedFilePathRulesJSON = rulesJSONFromRules(permittedFilePathRules);
 
-  permittedFilePathMatchers = permittedFilePathMatchersJSON;  ///
+  permittedFilePathRules = permittedFilePathRulesJSON;  ///
 
   updateConfigurationFile({
-    permittedFilePathMatchers
+    permittedFilePathRules
   });
 }
 
-function updateIgnoredDirectoryPathMatchers(ignoredDirectoryPathMatchers) {
-  const ignoredDirectoryPathMatchersJSON = matchersJSONFromMatchers(ignoredDirectoryPathMatchers);
+function updateIgnoredDirectoryPathRules(ignoredDirectoryPathRules) {
+  const ignoredDirectoryPathRulesJSON = rulesJSONFromRules(ignoredDirectoryPathRules);
 
-  ignoredDirectoryPathMatchers = ignoredDirectoryPathMatchersJSON;  ///
+  ignoredDirectoryPathRules = ignoredDirectoryPathRulesJSON;  ///
 
   updateConfigurationFile({
-    ignoredDirectoryPathMatchers
+    ignoredDirectoryPathRules
   });
 }
 
-function updatePermittedDirectoryPathMatchers(permittedDirectoryPathMatchers) {
-  const permittedDirectoryPathMatchersJSON = matchersJSONFromMatchers(permittedDirectoryPathMatchers);
+function updatePermittedDirectoryPathRules(permittedDirectoryPathRules) {
+  const permittedDirectoryPathRulesJSON = rulesJSONFromRules(permittedDirectoryPathRules);
 
-  permittedDirectoryPathMatchers = permittedDirectoryPathMatchersJSON;  ///
+  permittedDirectoryPathRules = permittedDirectoryPathRulesJSON;  ///
 
   updateConfigurationFile({
-    permittedDirectoryPathMatchers
+    permittedDirectoryPathRules
   });
 }
 
@@ -137,8 +138,9 @@ function migrateConfigurationFile() {
           [ VERSION_1_0 ]: migrateConfigurationToVersion_1_1,
           [ VERSION_1_1 ]: migrateConfigurationToVersion_1_2,
           [ VERSION_1_2 ]: migrateConfigurationToVersion_1_3,
+          [ VERSION_1_3 ]: migrateConfigurationToVersion_1_4
         },
-        latestVersion = VERSION_1_3;
+        latestVersion = VERSION_1_4;
 
   json = migrate(json, migrationMap, latestVersion);
 
@@ -164,15 +166,15 @@ function assertConfigurationFileExists() {
 
 module.exports = {
   retrieveRootDirectoryPaths,
-  retrieveIgnoredFilePathMatchers,
-  retrievePermittedFilePathMatchers,
-  retrieveIgnoredDirectoryPathMatchers,
-  retrievePermittedDirectoryPathMatchers,
+  retrieveIgnoredFilePathRules,
+  retrievePermittedFilePathRules,
+  retrieveIgnoredDirectoryPathRules,
+  retrievePermittedDirectoryPathRules,
   updateRootDirectoryPaths,
-  updateIgnoredFilePathMatchers,
-  updatePermittedFilePathMatchers,
-  updateIgnoredDirectoryPathMatchers,
-  updatePermittedDirectoryPathMatchers,
+  updateIgnoredFilePathRules,
+  updatePermittedFilePathRules,
+  updateIgnoredDirectoryPathRules,
+  updatePermittedDirectoryPathRules,
   createConfigurationFile,
   migrateConfigurationFile,
   checkConfigurationFileExists
@@ -204,25 +206,25 @@ function updateConfigurationFile(addedConfiguration, ...deleteConfigurationNames
   updateRCFile(addedProperties, ...deletedPropertyNames);
 }
 
-function matchersFromPathMatchersJSON(matchersJSON) {
-  const matchers = matchersJSON.map((matcherJSON) => {
-    const json = matcherJSON, ///
-          matcher = GlobMatcher.fromJSON(json) ||
-                    RegexMatcher.fromJSON(json) ||
-                    StringMatcher.fromJSON(json);
+function rulesFromPathRulesJSON(rulesJSON) {
+  const rules = rulesJSON.map((ruleJSON) => {
+    const json = ruleJSON, ///
+          rule = GlobRule.fromJSON(json) ||
+                    RegexRule.fromJSON(json) ||
+                    StringRule.fromJSON(json);
 
-    return matcher;
+    return rule;
   });
 
-  return matchers;
+  return rules;
 }
 
-function matchersJSONFromMatchers(matchers) {
-  const matchersJSON = matchers.map((matcher) => {
-    const matcherJSON = matcher.toJSON();
+function rulesJSONFromRules(rules) {
+  const rulesJSON = rules.map((rule) => {
+    const ruleJSON = rule.toJSON();
 
-    return matcherJSON;
+    return ruleJSON;
   });
 
-  return matchersJSON;
+  return rulesJSON;
 }

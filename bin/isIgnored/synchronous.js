@@ -9,18 +9,18 @@ function synchronousIsFilePathIgnored(filePath, context) {
 
   filePath = stripRootDirectoryFromPath(filePath, context);  ///
 
-  const { ignoredFilePathMatchers, permittedFilePathMatchers } = context,
+  const { ignoredFilePathRules, permittedFilePathRules } = context,
         string = filePath;  ///
 
-  ignoredFilePathMatchers.some((ignoredFilePathMatcher) => {
-    const matches = ignoredFilePathMatcher.match(string);
+  ignoredFilePathRules.some((ignoredFilePathRule) => {
+    const matches = ignoredFilePathRule.match(string);
 
     if (matches) {
-      const matcher = ignoredFilePathMatcher, ///
-            matcherString = matcher.asString();
+      const rule = ignoredFilePathRule, ///
+            ruleString = rule.asString();
 
       Object.assign(context, {
-        matcherString
+        ruleString
       });
 
       filePathIgnored = true;
@@ -29,15 +29,15 @@ function synchronousIsFilePathIgnored(filePath, context) {
     }
   });
 
-  permittedFilePathMatchers.some((permittedFilePathMatcher) => {
-    const matches = permittedFilePathMatcher.match(string);
+  permittedFilePathRules.some((permittedFilePathRule) => {
+    const matches = permittedFilePathRule.match(string);
 
     if (matches) {
-      const matcher = permittedFilePathMatcher, ///
-            matcherString = matcher.asString();
+      const rule = permittedFilePathRule, ///
+            ruleString = rule.asString();
 
       Object.assign(context, {
-        matcherString
+        ruleString
       });
 
       filePathIgnored = false;
@@ -57,18 +57,18 @@ function synchronousIsDirectoryPathIgnored(directoryPath, context) {
   if (directoryPath === EMPTY_STRING) {
     directoryPathIgnored = false;
   } else {
-    const { ignoredDirectoryPathMatchers, permittedDirectoryPathMatchers } = context,
+    const { ignoredDirectoryPathRules, permittedDirectoryPathRules } = context,
           string = addTrailingForwardSlash(directoryPath);  ///
 
-    ignoredDirectoryPathMatchers.some((ignoredDirectoryPathMatcher) => {
-      const matches = ignoredDirectoryPathMatcher.match(string);
+    ignoredDirectoryPathRules.some((ignoredDirectoryPathRule) => {
+      const matches = ignoredDirectoryPathRule.match(string);
 
       if (matches) {
-        const matcher = ignoredDirectoryPathMatcher, ///
-              matcherString = matcher.asString();
+        const rule = ignoredDirectoryPathRule, ///
+              ruleString = rule.asString();
 
         Object.assign(context, {
-          matcherString
+          ruleString
         });
 
         directoryPathIgnored = true;
@@ -77,15 +77,15 @@ function synchronousIsDirectoryPathIgnored(directoryPath, context) {
       }
     });
 
-    permittedDirectoryPathMatchers.some((permittedDirectoryPathMatcher) => {
-      const matches = permittedDirectoryPathMatcher.match(string);
+    permittedDirectoryPathRules.some((permittedDirectoryPathRule) => {
+      const matches = permittedDirectoryPathRule.match(string);
 
       if (matches) {
-        const matcher = permittedDirectoryPathMatcher, ///
-              matcherString = matcher.asString();
+        const rule = permittedDirectoryPathRule, ///
+              ruleString = rule.asString();
 
         Object.assign(context, {
-          matcherString
+          ruleString
         });
 
         directoryPathIgnored = false;

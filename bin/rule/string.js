@@ -3,7 +3,7 @@
 const { STRING_TYPE } = require("../types"),
       { addDoubleQuotes, removeDoubleQuotes } = require("../utilities/literal");
 
-class StringMatcher {
+class StringRule {
   constructor(string) {
     this.string = string;
   }
@@ -38,28 +38,28 @@ class StringMatcher {
   }
 
   static fromJSON(json) {
-    let stringMatcher = null;
+    let stringRule = null;
 
     const { type } = json;
 
     if (type === STRING_TYPE) {
       const { string } = json;
 
-      stringMatcher = new StringMatcher(string);
+      stringRule = new StringRule(string);
     }
 
-    return stringMatcher;
+    return stringRule;
   }
 
   static fromString(string) {
-    let stringMatcher = null;
+    let stringRule = null;
 
     if (string !== null) {
-      stringMatcher = new StringMatcher(string);
+      stringRule = new StringRule(string);
     }
 
-    return stringMatcher;
+    return stringRule;
   }
 }
 
-module.exports = StringMatcher;
+module.exports = StringRule;

@@ -23,10 +23,7 @@ function prepare(command, argument, options, main) {
 
   if ((command === HELP_COMMAND) ||
       (command === VERSION_COMMAND) ||
-      (command === INITIALISE_COMMAND) ||
-      (command === ADD_ROOT_DIRECTORY_PATH_COMMAND) ||
-      (command === LIST_ROOT_DIRECTORY_PATHS_COMMAND) ||
-      (command === REMOVE_ROOT_DIRECTORY_PATH_COMMAND)) {
+      (command === INITIALISE_COMMAND)) {
 
     main(command, argument, options);
 
@@ -34,6 +31,15 @@ function prepare(command, argument, options, main) {
   }
 
   migrateConfigurationFile();
+
+  if ((command === ADD_ROOT_DIRECTORY_PATH_COMMAND) ||
+      (command === LIST_ROOT_DIRECTORY_PATHS_COMMAND) ||
+      (command === REMOVE_ROOT_DIRECTORY_PATH_COMMAND)) {
+
+    main(command, argument, options);
+
+    return;
+  }
 
   argument = command; ///
 

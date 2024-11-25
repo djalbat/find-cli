@@ -3,7 +3,7 @@
 const { GLOB_TYPE } = require("../types"),
       { patternFromGlob } = require("../utilities/matcher");
 
-class GlobMatcher {
+class GlobRule {
   constructor(glob, pattern) {
     this.glob = glob;
     this.pattern = pattern;
@@ -44,32 +44,32 @@ class GlobMatcher {
   }
 
   static fromJSON(json) {
-    let globMatcher = null;
+    let globRule = null;
 
     const { type } = json;
 
     if (type === GLOB_TYPE) {
       const { glob, pattern } = json;
 
-      globMatcher = new GlobMatcher(glob, pattern);
+      globRule = new GlobRule(glob, pattern);
     }
 
-    return globMatcher;
+    return globRule;
   }
 
   static fromGlob(glob) {
-    let globMatcher = null;
+    let globRule = null;
 
     if (glob !== null) {
       const pattern = patternFromGlob(glob);
 
       if (pattern !== null) {
-        globMatcher = new GlobMatcher(glob, pattern);
+        globRule = new GlobRule(glob, pattern);
       }
     }
 
-    return globMatcher;
+    return globRule;
   }
 }
 
-module.exports = GlobMatcher;
+module.exports = GlobRule;

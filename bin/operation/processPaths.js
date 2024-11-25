@@ -98,13 +98,13 @@ function processFilePath(filePath, callback, context) {
     const { quietly } = context;
 
     if (!quietly) {
-      const { matcherString } = context;
+      const { ruleString } = context;
 
       let message = filePathIgnored ?
                       red(`Ignore ${filePath}`) :
                         green(`Permit ${filePath}`);
 
-      message = `${message} ${matcherString}`;
+      message = `${message} ${ruleString}`;
 
       console.log(message);
 
@@ -157,13 +157,13 @@ function processDirectoryPath(directoryPath, callback, context) {
       const { quietly } = context;
 
       if (!quietly) {
-        const { matcherString } = context;
+        const { ruleString } = context;
 
         let message = directoryPathIgnored ?
                         red(`Ignore ${directoryPath}/`) :
                           green(`Permit ${directoryPath}/`);
 
-        message = `${message} ${matcherString}`;
+        message = `${message} ${ruleString}`;
 
         console.log(message);
 

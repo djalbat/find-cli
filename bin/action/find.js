@@ -6,7 +6,7 @@ const processPathsOperation = require("../operation/processPaths"),
 const { executeOperations } = require("../utilities/operation"),
       { FAILED_FIND_MESSAGE, SUCCESSFUL_FIND_MESSAGE } = require("../messages");
 
-function findAction(string, quietly) {
+function findAction(string, dryRun, quietly) {
   const operations = [
           readConfigurationOperation,
           processPathsOperation
@@ -16,6 +16,7 @@ function findAction(string, quietly) {
         totalDirectories = 0,
         context = {
           string,
+          dryRun,
           quietly,
           totalLines,
           totalFiles,

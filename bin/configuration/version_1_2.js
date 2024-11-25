@@ -1,6 +1,6 @@
 "use strict";
 
-const StringMatcher = require("../matcher/string");
+const StringMatcher = require("../rule/string");
 
 const { VERSION_1_2 } = require("../versions");
 

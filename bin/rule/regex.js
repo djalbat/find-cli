@@ -3,7 +3,7 @@
 const { REGEX_TYPE } = require("../types"),
       { addForwardSlashes } = require("../utilities/literal");
 
-class RegexMatcher {
+class RegexRule {
   constructor(pattern) {
     this.pattern = pattern;
   }
@@ -37,28 +37,28 @@ class RegexMatcher {
   }
 
   static fromJSON(json) {
-    let regexMatcher = null;
+    let regexRule = null;
 
     const { type } = json;
 
     if (type === REGEX_TYPE) {
       const { pattern } = json;
 
-      regexMatcher = new RegexMatcher(pattern);
+      regexRule = new RegexRule(pattern);
     }
 
-    return regexMatcher;
+    return regexRule;
   }
 
   static fromPattern(pattern) {
-    let regexMatcher = null;
+    let regexRule = null;
 
     if (pattern !== null) {
-      regexMatcher = new RegexMatcher(pattern);
+      regexRule = new RegexRule(pattern);
     }
 
-    return regexMatcher;
+    return regexRule;
   }
 }
 
-module.exports = RegexMatcher;
+module.exports = RegexRule;

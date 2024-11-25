@@ -45,6 +45,8 @@ Options:
 
   --version|-v                             Show the version
 
+  --dry-run|-d                             Traverse the directories and files but do not search
+
   --quietly|-q                             Execute shell commands without printing to the console
 ```
 

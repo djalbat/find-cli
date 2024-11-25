@@ -2,10 +2,12 @@
 
 const HELP_OPTION = "help",
       VERSION_OPTION = "version",
-      QUIETLY_OPTION = "quietly";
+      QUIETLY_OPTION = "quietly",
+      DRY_RUN_OPTION = "dry-run";
 
 module.exports = {
   HELP_OPTION,
   VERSION_OPTION,
-  QUIETLY_OPTION
+  QUIETLY_OPTION,
+  DRY_RUN_OPTION
 };
