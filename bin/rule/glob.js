@@ -4,9 +4,8 @@ const converters = require("../converters");
 
 const { GLOB_TYPE } = require("../types"),
       {EMPTY_STRING} = require("../constants"),
-      { isAnswerString } = require("../rule/string"),
-      { isAnswerPattern } = require("../rule/regex"),
-      { addAnchors, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/literal");
+      { isStringGlobLiteral } = require("../utilities/literal"),
+      { addAnchors, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
 
 class GlobRule {
   constructor(glob, pattern) {
@@ -62,8 +61,10 @@ class GlobRule {
     return globRule;
   }
 
-  static fromGlob(glob) {
+  static fromStringAndDirectory(string, directory) {
     let globRule = null;
+
+    const glob = globFromStringAndDirectory(string, directory);
 
     if (glob !== null) {
       const pattern = patternFromGlob(glob);
@@ -75,24 +76,9 @@ class GlobRule {
 
     return globRule;
   }
-
-  static fromAnswerAndDirectory(answer, directory) {
-    const glob = globFromAnswerAndDirectory(answer, directory),
-          globRule = GlobRule.fromGlob(glob);
-
-    return globRule;
-  }
 }
 
 module.exports = GlobRule;
-
-function isAnswerGlob(answer) {
-  const answerPattern = isAnswerPattern(answer),
-        answerString = isAnswerString(answer),
-        answerGlob = (!answerPattern && !answerString);
-
-  return answerGlob;
-}
 
 function patternFromGlob(glob) {
   let pattern = EMPTY_STRING;
@@ -120,33 +106,31 @@ function patternFromGlob(glob) {
   return pattern;
 }
 
-function globFromGlobAndDirectory(glob, directory) {
-  glob = removeTrailingForwardSlash(glob);  ///
+function globFromStringAndDirectory(string, directory) {
+  let glob;
 
-  if (directory) {
-    glob = addTrailingForwardSlash(glob); ///
-  }
+  const stringGlobLiteral = isStringGlobLiteral(string);
 
-  try {
-    const pattern = patternFromGlob(glob);
+  if (stringGlobLiteral) {
+    const globLiteral = string; ///
 
-    new RegExp(pattern);
-  } catch (error) {
+    glob = globLiteral;  ///
+
+    glob = removeTrailingForwardSlash(glob);  ///
+
+    if (directory) {
+      glob = addTrailingForwardSlash(glob); ///
+    }
+
+    try {
+      const pattern = patternFromGlob(glob);
+
+      new RegExp(pattern);
+    } catch (error) {
+      glob = null;
+    }
+  } else {
     glob = null;
-  }
-
-  return glob;
-}
-
-function globFromAnswerAndDirectory(answer, directory) {
-  let glob = null;
-
-  const answerGlob = isAnswerGlob(answer);
-
-  if (answerGlob) {
-    glob = answer;  ///
-
-    glob = globFromGlobAndDirectory(glob, directory);
   }
 
   return glob;

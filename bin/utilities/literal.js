@@ -1,36 +1,19 @@
 "use strict";
 
-const { EMPTY_STRING } = require("../constants");
+function isStringGlobLiteral(string) {
+  const stringStringLiteral = isStringStringLiteral(string),
+        stringRegexLiteral = isStringRegexLiteral(string),
+        stringGlobLiteral = (!stringStringLiteral && !stringRegexLiteral);
 
-function addAnchors(literal) { return `^${literal}$`; }
+  return stringGlobLiteral;
+}
 
-function removeAnchors(literal) { return literal.replace(/(^\^|\$$)/g, EMPTY_STRING); }
+function isStringRegexLiteral(string) { return /^\/.*?\/$/.test(string); }
 
-function addDoubleQuotes(literal) { return `"${literal}"`; }
-
-function addForwardSlashes(literal) { return `/${literal}/`; }
-
-function removeDoubleQuotes(literal) { return literal.replace(/(^"|"$)/g, EMPTY_STRING); }
-
-function removeForwardSlashes(literal) { return literal.replace(/(^\/|\/$)/g, EMPTY_STRING); }
-
-function addTrailingForwardSlash(literal) { return `${literal}\/`; }
-
-function removeTrailingForwardSlash(literal) { return literal.replace(/(\/$)/, EMPTY_STRING); }
-
-function addTrailingEscapedForwardSlash(literal) { return `${literal}\\\/`; }
-
-function removeTrailingEscapedForwardSlash(literal) { return literal.replace(/(\\\/$)/, EMPTY_STRING); }
+function isStringStringLiteral(string) { return /^".*?"$/.test(string); }
 
 module.exports = {
-  addAnchors,
-  removeAnchors,
-  addDoubleQuotes,
-  addForwardSlashes,
-  removeDoubleQuotes,
-  removeForwardSlashes,
-  addTrailingForwardSlash,
-  removeTrailingForwardSlash,
-  addTrailingEscapedForwardSlash,
-  removeTrailingEscapedForwardSlash
+  isStringGlobLiteral,
+  isStringRegexLiteral,
+  isStringStringLiteral
 };

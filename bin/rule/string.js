@@ -1,7 +1,8 @@
 "use strict";
 
 const { STRING_TYPE } = require("../types"),
-      { addDoubleQuotes, removeDoubleQuotes, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/literal");
+      { isStringStringLiteral } = require("../utilities/literal"),
+      { addDoubleQuotes, removeDoubleQuotes, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
 
 class StringRule {
   constructor(string) {
@@ -51,8 +52,10 @@ class StringRule {
     return stringRule;
   }
 
-  static fromString(string) {
+  static fromStringAndDirectory(string, directory) {
     let stringRule = null;
+
+    string = stringFromStringAndDirectory(string, directory); ///
 
     if (string !== null) {
       stringRule = new StringRule(string);
@@ -60,46 +63,27 @@ class StringRule {
 
     return stringRule;
   }
-
-  static fromAnswerAndDirectory(answer, directory) {
-    const string = stringFromAnswerAndDirectory(answer, directory),
-          stringRule = StringRule.fromString(string);
-
-    return stringRule;
-  }
 }
-
-function isAnswerString(answer) { return /^".*?"$/.test(answer); }
 
 module.exports = StringRule;
 
-Object.assign(module.exports, {
-  isAnswerString
-});
-
 function stringFromStringAndDirectory(string, directory) {
-  string = removeDoubleQuotes(string);  ///
+  const stringStringLiteral = isStringStringLiteral(string);
 
-  string = removeTrailingForwardSlash(string);  ///
+  if (stringStringLiteral) {
+    const stringLiteral = string; ///
 
-  if (directory) {
-    string = addTrailingForwardSlash(string); ///
-  }
+    string = removeDoubleQuotes(stringLiteral);  ///
 
-  string = addDoubleQuotes(string); ///
+    string = removeTrailingForwardSlash(string);  ///
 
-  return string;
-}
+    if (directory) {
+      string = addTrailingForwardSlash(string); ///
+    }
 
-function stringFromAnswerAndDirectory(answer, directory) {
-  let string = null;
-
-  const answerString = isAnswerString(answer);
-
-  if (answerString) {
-    string = answer;  ///
-
-    string = stringFromStringAndDirectory(string, directory);  ///
+    string = addDoubleQuotes(string); ///
+  } else {
+    string = null;
   }
 
   return string;

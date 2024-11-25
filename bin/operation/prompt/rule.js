@@ -2,7 +2,7 @@
 
 const { shellUtilities } = require("necessary");
 
-const { ruleFromAnswerAndDirectory } = require("../../utilities/rule"),
+const { ruleFromStringAndDirectory } = require("../../utilities/rule"),
       { validateGlobStringOrPattern } = require("../../utilities/validate"),
       { GLOB_STRING_OR_REGEX_DESCRIPTION } = require("../../descriptions"),
       { INVALID_GLOB_REGEX_OR_STRING_MESSAGE } = require("../../messages");
@@ -35,7 +35,8 @@ function rulePromptOperation(proceed, abort, context) {
       return;
     }
 
-    const rule = ruleFromAnswerAndDirectory(answer, directory);
+    const string = answer,  ///
+          rule = ruleFromStringAndDirectory(string, directory);
 
     Object.assign(context, {
       rule

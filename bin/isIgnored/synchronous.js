@@ -1,7 +1,7 @@
 "use strict";
 
 const { EMPTY_STRING } = require("../constants"),
-      { addTrailingForwardSlash } = require("../utilities/literal"),
+      { addTrailingForwardSlash } = require("../utilities/string"),
       { stripRootDirectoryFromPath } = require("../utilities/path");
 
 function synchronousIsFilePathIgnored(filePath, context) {

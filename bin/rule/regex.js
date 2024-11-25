@@ -1,12 +1,13 @@
 "use strict";
 
 const { REGEX_TYPE } = require("../types"),
+      { isStringRegexLiteral } = require("../utilities/literal"),
       { addAnchors,
         removeAnchors,
         addForwardSlashes,
         removeForwardSlashes,
         addTrailingEscapedForwardSlash,
-        removeTrailingEscapedForwardSlash } = require("../utilities/literal");
+        removeTrailingEscapedForwardSlash } = require("../utilities/string");
 
 class RegexRule {
   constructor(pattern) {
@@ -55,8 +56,10 @@ class RegexRule {
     return regexRule;
   }
 
-  static fromPattern(pattern) {
+  static fromStringAndDirectory(string, directory) {
     let regexRule = null;
+
+    const pattern = patternFromStringAndDirectory(string, directory);
 
     if (pattern !== null) {
       regexRule = new RegexRule(pattern);
@@ -64,54 +67,37 @@ class RegexRule {
 
     return regexRule;
   }
-
-  static fromAnswerAndDirectory(answer, directory) {
-    const pattern = patternFromAnswerAndDirectory(answer, directory),
-          regexRule = RegexRule.fromPattern(pattern);
-
-    return regexRule;
-  }
 }
-
-function isAnswerPattern(answer) { return /^\/.*?\/$/.test(answer); }
 
 module.exports = RegexRule;
 
-Object.assign(module.exports, {
-  isAnswerPattern
-});
+function patternFromStringAndDirectory(string, directory) {
+  let pattern;
 
-function patternFromPatternAndDirectory(pattern, directory) {
-  pattern = removeForwardSlashes(pattern);  ///
+  const stringRegexLiteral = isStringRegexLiteral(string);
 
-  pattern = removeAnchors(pattern); ///
+  if (stringRegexLiteral) {
+    const regexLiteral = string;  ///
 
-  pattern = removeTrailingEscapedForwardSlash(pattern);  ///
+    pattern = removeForwardSlashes(regexLiteral);
 
-  if (directory) {
-    pattern = addTrailingEscapedForwardSlash(pattern); ///
-  }
+    pattern = removeAnchors(pattern); ///
 
-  pattern = addAnchors(pattern);
+    pattern = removeTrailingEscapedForwardSlash(pattern);  ///
 
-  try {
-    new RegExp(pattern);
-  } catch (error) {
+    if (directory) {
+      pattern = addTrailingEscapedForwardSlash(pattern); ///
+    }
+
+    pattern = addAnchors(pattern);
+
+    try {
+      new RegExp(pattern);
+    } catch (error) {
+      pattern = null;
+    }
+  } else {
     pattern = null;
-  }
-
-  return pattern;
-}
-
-function patternFromAnswerAndDirectory(answer, directory) {
-  let pattern = null;
-
-  const answerPattern = isAnswerPattern(answer);
-
-  if (answerPattern) {
-    pattern = answer; ///
-
-    pattern = patternFromPatternAndDirectory(pattern, directory);  ///
   }
 
   return pattern;
