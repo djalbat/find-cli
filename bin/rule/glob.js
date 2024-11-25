@@ -1,7 +1,7 @@
 "use strict";
 
 const { GLOB_TYPE } = require("../types"),
-      { patternFromGlob } = require("../utilities/matcher");
+      { patternFromGlob } = require("../utilities/rule");
 
 class GlobRule {
   constructor(glob, pattern) {

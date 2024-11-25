@@ -2,11 +2,11 @@
 
 const { characters } = require("necessary");
 
-const CharacterMatcher = require("../characterMatcher");
+const Converter = require("../converter");
 
 const { BAR_CHARACTER, COMMA_CHARACTER } = characters;
 
-class AlternatesCharacterMatcher extends CharacterMatcher {
+class AlternatesConverter extends Converter {
   callback(characters) {
     characters.pop();
 
@@ -21,9 +21,9 @@ class AlternatesCharacterMatcher extends CharacterMatcher {
 
   static regex = /^{[^}]+}/;
 
-  static fromNothing() { return CharacterMatcher.fromNothing(AlternatesCharacterMatcher); }
+  static fromNothing() { return Converter.fromNothing(AlternatesConverter); }
 }
 
-const alternatesCharacterMatcher = AlternatesCharacterMatcher.fromNothing();
+const alternatesConverter = AlternatesConverter.fromNothing();
 
-module.exports = alternatesCharacterMatcher;
+module.exports = alternatesConverter;

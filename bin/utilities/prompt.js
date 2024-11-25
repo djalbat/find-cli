@@ -1,6 +1,6 @@
 "use strict";
 
-const { globFromGlobAndDirectory, stringFromStringAndDirectory, patternFromPatternAndDirectory } = require("../utilities/matcher");
+const { globFromGlobAndDirectory, stringFromStringAndDirectory, patternFromPatternAndDirectory } = require("../utilities/rule");
 
 function isAnswerIgnore(answer) { return /^(?:ignore|i)$/i.test(answer); }
 

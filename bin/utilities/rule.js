@@ -1,6 +1,6 @@
 "use strict";
 
-const characterMatchers = require("../characterMatchers");
+const converters = require("../converters");
 
 const { EMPTY_STRING } = require("../constants"),
       { addAnchors,
@@ -19,8 +19,8 @@ function patternFromGlob(glob) {
   const characters = [ ...glob ];
 
   for (;;) {
-    const matched = characterMatchers.some((characterMatcher) => {
-      const result = characterMatcher.match(characters);
+    const converted = converters.some((converter) => {
+      const result = converter.match(characters);
 
       if (result !== null) {
         pattern = `${pattern}${result}`;
@@ -29,7 +29,7 @@ function patternFromGlob(glob) {
       }
     });
 
-    if (!matched) {
+    if (!converted) {
       break;
     }
   }

@@ -6,7 +6,7 @@ const { EMPTY_STRING } = require("./constants");
 
 const { first } = arrayUtilities;
 
-class CharacterMatcher {
+class Converter {
   constructor(regex) {
     this.regex = regex;
   }
@@ -39,10 +39,10 @@ class CharacterMatcher {
 
   static fromNothing(Class) {
     const { regex } = Class,
-          characterMatcher = new Class(regex);
+          converter = new Class(regex);
 
-    return characterMatcher;
+    return converter;
   }
 }
 
-module.exports = CharacterMatcher;
+module.exports = Converter;

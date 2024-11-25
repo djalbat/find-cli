@@ -1,6 +1,6 @@
 "use strict";
 
-const StringMatcher = require("../rule/string");
+const StringRule = require("../rule/string");
 
 const { VERSION_1_2 } = require("../versions");
 
@@ -33,9 +33,9 @@ function matchersFromPaths(paths) {
     let matcher;
 
     const string = path,  ///
-          stringMatcher = StringMatcher.fromString(string);
+          stringRule = StringRule.fromString(string);
 
-    matcher = stringMatcher;  ///
+    matcher = stringRule;  ///
 
     const json = matcher.toJSON();
 

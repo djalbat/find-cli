@@ -2,11 +2,11 @@
 
 const { characters } = require("necessary");
 
-const CharacterMatcher = require("../characterMatcher");
+const Converter = require("../converter");
 
 const { HAT_CHARACTER, EXCLAMATION_MARK_CHARACTER } = characters;
 
-class CharacterClassCharacterMatcher extends CharacterMatcher {
+class CharacterClassConverter extends Converter {
   callback(characters) {
     characters.pop();
 
@@ -37,9 +37,9 @@ class CharacterClassCharacterMatcher extends CharacterMatcher {
 
   static regex = /^\[[^\]]+]/;
 
-  static fromNothing() { return CharacterMatcher.fromNothing(CharacterClassCharacterMatcher); }
+  static fromNothing() { return Converter.fromNothing(CharacterClassConverter); }
 }
 
-const characterClassCharacterMatcher = CharacterClassCharacterMatcher.fromNothing();
+const characterClassConverter = CharacterClassConverter.fromNothing();
 
-module.exports = characterClassCharacterMatcher;
+module.exports = characterClassConverter;
