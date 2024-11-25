@@ -1,5 +1,7 @@
 "use strict";
 
+const Occurrence = require("../occurrence");
+
 const { STRING_TYPE } = require("../types"),
       { isStringStringLiteral } = require("../utilities/literal"),
       { addDoubleQuotes, removeDoubleQuotes, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
@@ -22,6 +24,26 @@ class StringRule {
           };
 
     return json;
+  }
+
+  find(string) {
+    const occurrences = [];
+
+    let index = string.indexOf(this.string);
+
+    while (index !== -1) {
+      const occurrence = Occurrence.fromIndexAndString(index, string),
+            end = occurrence.getEnd(),
+            start = end;  ///
+
+      string = string.substring(start); ///
+
+      occurrences.push(occurrence);
+
+      index = string.match(this.regExp);
+    }
+
+    return occurrences;
   }
 
   match(string) {

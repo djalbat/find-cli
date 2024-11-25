@@ -1,16 +1,18 @@
 "use strict";
 
-const converters = require("../converters");
+const converters = require("../converters"),
+      Occurrence = require("../occurrence");
 
 const { GLOB_TYPE } = require("../types"),
-      {EMPTY_STRING} = require("../constants"),
+      { EMPTY_STRING } = require("../constants"),
       { isStringGlobLiteral } = require("../utilities/literal"),
       { addAnchors, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
 
 class GlobRule {
-  constructor(glob, pattern) {
+  constructor(glob, pattern, regExp) {
     this.glob = glob;
     this.pattern = pattern;
+    this.regExp = regExp;
   }
 
   getGlob() {
@@ -19,6 +21,10 @@ class GlobRule {
 
   getPattern() {
     return this.pattern;
+  }
+
+  getRegExp() {
+    return this.regExp;
   }
 
   toJSON() {
@@ -34,9 +40,28 @@ class GlobRule {
     return json;
   }
 
+  find(string) {
+    const occurrences = [];
+
+    let result = string.match(this.regExp);
+
+    while (result !== null) {
+      const occurrence = Occurrence.fromResult(result),
+            end = occurrence.getEnd(),
+            start = end;  ///
+
+      string = string.substring(start); ///
+
+      occurrences.push(occurrence);
+
+      result = string.match(this.regExp);
+    }
+
+    return occurrences;
+  }
+
   match(string) {
-    const regExp = new RegExp(this.pattern),
-          matches = regExp.test(string);
+    const matches = this.regExp.test(string);
 
     return matches;
   }
@@ -53,9 +78,10 @@ class GlobRule {
     const { type } = json;
 
     if (type === GLOB_TYPE) {
-      const { glob, pattern } = json;
+      const { glob, pattern } = json,
+            regExp = new RegExp(pattern);
 
-      globRule = new GlobRule(glob, pattern);
+      globRule = new GlobRule(glob, pattern, regExp);
     }
 
     return globRule;
@@ -67,9 +93,10 @@ class GlobRule {
     const glob = globFromStringAndDirectory(string, directory);
 
     if (glob !== null) {
-      const pattern = patternFromGlobAndAnchored(glob, anchored);
+      const pattern = patternFromGlobAndAnchored(glob, anchored),
+            regExp = new RegExp(pattern);
 
-      globRule = new GlobRule(glob, pattern);
+      globRule = new GlobRule(glob, pattern, regExp);
     }
 
     return globRule;

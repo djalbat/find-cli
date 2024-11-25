@@ -2,6 +2,7 @@
 
 const FIND = "find",
       FILE = "file",
+      G_FLAG = "g",
       FIND_CLI = "Find-CLI",
       DIRECTORY = "directory",
       EMPTY_STRING = "",
@@ -10,6 +11,7 @@ const FIND = "find",
 module.exports = {
   FIND,
   FILE,
+  G_FLAG,
   FIND_CLI,
   DIRECTORY,
   EMPTY_STRING,

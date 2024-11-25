@@ -1,5 +1,7 @@
 "use strict";
 
+const Occurrence = require("../occurrence");
+
 const { REGEX_TYPE } = require("../types"),
       { isStringRegexLiteral } = require("../utilities/literal"),
       { addAnchors,
@@ -10,12 +12,17 @@ const { REGEX_TYPE } = require("../types"),
         removeTrailingEscapedForwardSlash } = require("../utilities/string");
 
 class RegexRule {
-  constructor(pattern) {
+  constructor(pattern, regExp) {
     this.pattern = pattern;
+    this.regExp = regExp;
   }
 
   getPattern() {
     return this.pattern;
+  }
+
+  getRegExp() {
+    return this.regExp;
   }
 
   toJSON() {
@@ -29,9 +36,28 @@ class RegexRule {
     return json;
   }
 
+  find(string) {
+    const occurrences = [];
+
+    let result = string.match(this.regExp);
+
+    while (result !== null) {
+      const occurrence = Occurrence.fromResult(result),
+            end = occurrence.getEnd(),
+            start = end;  ///
+
+      string = string.substring(start); ///
+
+      occurrences.push(occurrence);
+
+      result = string.match(this.regExp);
+    }
+
+    return occurrences;
+  }
+
   match(string) {
-    const regExp = new RegExp(this.pattern),
-          matches = regExp.test(string);
+    const matches = this.regExp.test(string);
 
     return matches;
   }
@@ -48,9 +74,10 @@ class RegexRule {
     const { type } = json;
 
     if (type === REGEX_TYPE) {
-      const { pattern } = json;
+      const { pattern } = json,
+            regExp = new RegExp(pattern);
 
-      regexRule = new RegexRule(pattern);
+      regexRule = new RegexRule(pattern, regExp);
     }
 
     return regexRule;
@@ -62,7 +89,9 @@ class RegexRule {
     const pattern = patternFromStringAndDirectory(string, anchored, directory);
 
     if (pattern !== null) {
-      regexRule = new RegexRule(pattern);
+      const regExp = new RegExp(pattern);
+
+      regexRule = new RegexRule(pattern, regExp);
     }
 
     return regexRule;
