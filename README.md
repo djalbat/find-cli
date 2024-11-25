@@ -36,6 +36,8 @@ Commands:
   add-root-directory                       Add a root directory
 
   remove-root-directory                    Remove a root directory
+
+  list-root-directories                    List the root directories
   
 Options:
 

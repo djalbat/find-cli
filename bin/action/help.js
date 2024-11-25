@@ -17,6 +17,8 @@ Commands:
 
   remove-root-directory                    Remove a root directory
 
+  list-root-directories                    List the root directories
+
 Options:
 
   --help|-h                                Show this help

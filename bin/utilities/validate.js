@@ -2,6 +2,25 @@
 
 const { globFromAnswerAndDirectory, stringFromAnswerAndDirectory, patternFromAnswerAndDirectory } = require("../utilities/prompt");
 
+function validateRootDirectory(answer) {
+  let valid = true;
+
+  if (valid) {
+    valid = /^\.\.\/(?:[^/]*\/)+$/i.test(answer);
+  }
+
+  if (valid) {
+    const directory = true,
+          glob = globFromAnswerAndDirectory(answer, directory);
+
+    if (glob === null) {
+      valid = false;
+    }
+  }
+
+  return valid;
+}
+
 function validateIgnoreOrPermit(answer) { return /^(:?ignore|permit|i|p)$/i.test(answer); }
 
 function validateGlobStringOrPattern(answer, directory) {
@@ -14,6 +33,7 @@ function validateGlobStringOrPattern(answer, directory) {
 }
 
 module.exports = {
+  validateRootDirectory,
   validateIgnoreOrPermit,
   validateGlobStringOrPattern
 };

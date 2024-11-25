@@ -5,7 +5,10 @@ const { migrateConfigurationFile } = require("./configuration"),
       { FIND_COMMAND,
         HELP_COMMAND,
         VERSION_COMMAND,
-        INITIALISE_COMMAND } = require("./commands");
+        INITIALISE_COMMAND,
+        ADD_ROOT_DIRECTORY_PATH_COMMAND,
+        LIST_ROOT_DIRECTORY_PATHS_COMMAND,
+        REMOVE_ROOT_DIRECTORY_PATH_COMMAND } = require("./commands");
 
 function prepare(command, argument, options, main) {
   const { help = DEFAULT_HELP, version = DEFAULT_VERSION } = options;
@@ -20,7 +23,10 @@ function prepare(command, argument, options, main) {
 
   if ((command === HELP_COMMAND) ||
       (command === VERSION_COMMAND) ||
-      (command === INITIALISE_COMMAND)) {
+      (command === INITIALISE_COMMAND) ||
+      (command === ADD_ROOT_DIRECTORY_PATH_COMMAND) ||
+      (command === LIST_ROOT_DIRECTORY_PATHS_COMMAND) ||
+      (command === REMOVE_ROOT_DIRECTORY_PATH_COMMAND)) {
 
     main(command, argument, options);
 

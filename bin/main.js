@@ -4,8 +4,9 @@ const findAction = require("./action/find"),
       helpAction = require("./action/help"),
       versionAction = require("./action/version"),
       initialiseAction = require("./action/initialise"),
-      addRootDirectoryAction = require("./action/addRootDirectory"),
-      removeRootDirectoryAction = require("./action/removeRootDirectory");
+      addRootDirectoryPathAction = require("./action/addRootDirectoryPath"),
+      listRootDirectoryPathsAction = require("./action/listRootDirectoryPaths"),
+      removeRootDirectoryPathAction = require("./action/removeRootDirectoryPath");
 
 const { NO_ARGUMENT_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require("./messages"),
       { DEFAULT_QUIETLY } = require("./defaults"),
@@ -13,8 +14,9 @@ const { NO_ARGUMENT_GIVEN_MESSAGE, COMMAND_NOT_RECOGNISED_MESSAGE } = require(".
         HELP_COMMAND,
         VERSION_COMMAND,
         INITIALISE_COMMAND,
-        ADD_ROOT_DIRECTORY_COMMAND,
-        REMOVE_ROOT_DIRECTORY_COMMAND } = require("./commands");
+        ADD_ROOT_DIRECTORY_PATH_COMMAND,
+        LIST_ROOT_DIRECTORY_PATHS_COMMAND,
+        REMOVE_ROOT_DIRECTORY_PATH_COMMAND } = require("./commands");
 
 function main(command, argument, options) {
   const { quietly = DEFAULT_QUIETLY } = options;
@@ -38,6 +40,26 @@ function main(command, argument, options) {
       break;
     }
 
+    case ADD_ROOT_DIRECTORY_PATH_COMMAND: {
+      const rootDirectory = argument; ///
+
+      addRootDirectoryPathAction(rootDirectory);
+
+      break;
+    }
+
+    case LIST_ROOT_DIRECTORY_PATHS_COMMAND: {
+      listRootDirectoryPathsAction();
+
+      break;
+    }
+
+    case REMOVE_ROOT_DIRECTORY_PATH_COMMAND: {
+      removeRootDirectoryPathAction();
+
+      break;
+    }
+
     case FIND_COMMAND: {
       if (argument === null) {
         console.log(NO_ARGUMENT_GIVEN_MESSAGE);
@@ -46,20 +68,6 @@ function main(command, argument, options) {
 
         findAction(string, quietly);
       }
-
-      break;
-    }
-
-    case ADD_ROOT_DIRECTORY_COMMAND: {
-      const rootDirectory = argument; ///
-
-      addRootDirectoryAction(rootDirectory);
-
-      break;
-    }
-
-    case REMOVE_ROOT_DIRECTORY_COMMAND: {
-      removeRootDirectoryAction();
 
       break;
     }
