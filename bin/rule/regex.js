@@ -1,7 +1,12 @@
 "use strict";
 
 const { REGEX_TYPE } = require("../types"),
-      { addForwardSlashes } = require("../utilities/literal");
+      { addAnchors,
+        removeAnchors,
+        addForwardSlashes,
+        removeForwardSlashes,
+        addTrailingEscapedForwardSlash,
+        removeTrailingEscapedForwardSlash } = require("../utilities/literal");
 
 class RegexRule {
   constructor(pattern) {
@@ -59,6 +64,56 @@ class RegexRule {
 
     return regexRule;
   }
+
+  static fromAnswerAndDirectory(answer, directory) {
+    const pattern = patternFromAnswerAndDirectory(answer, directory),
+          regexRule = RegexRule.fromPattern(pattern);
+
+    return regexRule;
+  }
 }
 
+function isAnswerPattern(answer) { return /^\/.*?\/$/.test(answer); }
+
 module.exports = RegexRule;
+
+Object.assign(module.exports, {
+  isAnswerPattern
+});
+
+function patternFromPatternAndDirectory(pattern, directory) {
+  pattern = removeForwardSlashes(pattern);  ///
+
+  pattern = removeAnchors(pattern); ///
+
+  pattern = removeTrailingEscapedForwardSlash(pattern);  ///
+
+  if (directory) {
+    pattern = addTrailingEscapedForwardSlash(pattern); ///
+  }
+
+  pattern = addAnchors(pattern);
+
+  try {
+    new RegExp(pattern);
+  } catch (error) {
+    pattern = null;
+  }
+
+  return pattern;
+}
+
+function patternFromAnswerAndDirectory(answer, directory) {
+  let pattern = null;
+
+  const answerPattern = isAnswerPattern(answer);
+
+  if (answerPattern) {
+    pattern = answer; ///
+
+    pattern = patternFromPatternAndDirectory(pattern, directory);  ///
+  }
+
+  return pattern;
+}
+

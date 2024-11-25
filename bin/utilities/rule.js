@@ -1,101 +1,18 @@
 "use strict";
 
-const converters = require("../converters");
+const GlobRule = require("../rule/glob"),
+      RegexRule = require("../rule/regex"),
+      StringRule = require("../rule/string");
 
-const { EMPTY_STRING } = require("../constants"),
-      { addAnchors,
-        removeAnchors,
-        addDoubleQuotes,
-        removeDoubleQuotes,
-        removeForwardSlashes,
-        addTrailingForwardSlash,
-        removeTrailingForwardSlash,
-        addTrailingEscapedForwardSlash,
-        removeTrailingEscapedForwardSlash } = require("../utilities/literal");
+function ruleFromAnswerAndDirectory(answer, directory) {
+  const globRule = GlobRule.fromAnswerAndDirectory(answer, directory),
+        regexRule = RegexRule.fromAnswerAndDirectory(answer, directory),
+        stringRule = StringRule.fromAnswerAndDirectory(answer, directory),
+        rule = (globRule || regexRule || stringRule);
 
-function patternFromGlob(glob) {
-  let pattern = EMPTY_STRING;
-
-  const characters = [ ...glob ];
-
-  for (;;) {
-    const converted = converters.some((converter) => {
-      const result = converter.match(characters);
-
-      if (result !== null) {
-        pattern = `${pattern}${result}`;
-
-        return true;
-      }
-    });
-
-    if (!converted) {
-      break;
-    }
-  }
-
-  pattern = addAnchors(pattern);
-
-  return pattern;
-}
-
-function globFromGlobAndDirectory(glob, directory) {
-  glob = removeTrailingForwardSlash(glob);  ///
-
-  if (directory) {
-    glob = addTrailingForwardSlash(glob); ///
-  }
-
-  try {
-    const pattern = patternFromGlob(glob);
-
-    new RegExp(pattern);
-  } catch (error) {
-    glob = null;
-  }
-
-  return glob;
-}
-
-function stringFromStringAndDirectory(string, directory) {
-  string = removeDoubleQuotes(string);  ///
-
-  string = removeTrailingForwardSlash(string);  ///
-
-  if (directory) {
-    string = addTrailingForwardSlash(string); ///
-  }
-
-  string = addDoubleQuotes(string); ///
-
-  return string;
-}
-
-function patternFromPatternAndDirectory(pattern, directory) {
-  pattern = removeForwardSlashes(pattern);  ///
-
-  pattern = removeAnchors(pattern); ///
-
-  pattern = removeTrailingEscapedForwardSlash(pattern);  ///
-
-  if (directory) {
-    pattern = addTrailingEscapedForwardSlash(pattern); ///
-  }
-
-  pattern = addAnchors(pattern);
-
-  try {
-    new RegExp(pattern);
-  } catch (error) {
-    pattern = null;
-  }
-
-  return pattern;
+  return rule;
 }
 
 module.exports = {
-  patternFromGlob,
-  globFromGlobAndDirectory,
-  stringFromStringAndDirectory,
-  patternFromPatternAndDirectory
+  ruleFromAnswerAndDirectory
 };

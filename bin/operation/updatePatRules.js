@@ -1,30 +1,25 @@
 "use strict";
 
-const GlobRule = require("../rule/glob"),
-      RegexRule = require("../rule/regex"),
-      StringRule = require("../rule/string");
-
 const { updateIgnoredFilePathRules,
         updatePermittedFilePathRules,
         updateIgnoredDirectoryPathRules,
         updatePermittedDirectoryPathRules } = require("../configuration");
 
 function updatePathRulesOperation(proceed, abort, context) {
-  const { glob, string, pattern, directory, pathIgnored } = context;
+  const { rule, directory, pathIgnored } = context;
 
   pathIgnored ?
-    addIgnoreRule(glob, string, pattern, directory, context) :
-      addPermitRule(glob, string, pattern, directory, context);
+    addIgnoreRule(rule, directory, context) :
+      addPermitRule(rule, directory, context);
 
   proceed();
 }
 
 module.exports = updatePathRulesOperation;
 
-function addIgnoreRule(glob, string, pattern, directory, context) {
+function addIgnoreRule(rule, directory, context) {
   if (directory) {
     const { ignoredDirectoryPathRules } = context,
-          rule = ruleFromGlobRegexOrString(glob, string, pattern),
           ignoredDirectoryPathRule = rule;  ///
 
     ignoredDirectoryPathRules.push(ignoredDirectoryPathRule);
@@ -32,7 +27,6 @@ function addIgnoreRule(glob, string, pattern, directory, context) {
     updateIgnoredDirectoryPathRules(ignoredDirectoryPathRules);
   } else {
     const { ignoredFilePathRules } = context,
-          rule = ruleFromGlobRegexOrString(glob, string, pattern),
           ignoredFilePathRule = rule;  ///
 
     ignoredFilePathRules.push(ignoredFilePathRule);
@@ -41,10 +35,9 @@ function addIgnoreRule(glob, string, pattern, directory, context) {
   }
 }
 
-function addPermitRule(glob, string, pattern, directory, context) {
+function addPermitRule(rule, directory, context) {
   if (directory) {
     const { permittedDirectoryPathRules } = context,
-          rule = ruleFromGlobRegexOrString(glob, string, pattern),
           permittedDirectoryPathRule = rule;  ///
 
     permittedDirectoryPathRules.push(permittedDirectoryPathRule);
@@ -52,20 +45,10 @@ function addPermitRule(glob, string, pattern, directory, context) {
     updatePermittedDirectoryPathRules(permittedDirectoryPathRules);
   } else {
     const { permittedFilePathRules } = context,
-          rule = ruleFromGlobRegexOrString(glob, string, pattern),
           permittedFilePathRule = rule;  ///
 
     permittedFilePathRules.push(permittedFilePathRule);
 
     updatePermittedFilePathRules(permittedFilePathRules);
   }
-}
-
-function ruleFromGlobRegexOrString(glob, string, pattern) {
-  const globRule = GlobRule.fromGlob(glob),
-        regexRule = RegexRule.fromPattern(pattern),
-        stringRule = StringRule.fromString(string),
-        rule = (globRule || regexRule || stringRule);
-
-  return rule;
 }

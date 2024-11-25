@@ -2,6 +2,8 @@
 
 const { fileSystemUtilities } = require("necessary");
 
+const find = require("../find");
+
 const { red, green, yellow } = require("../utilities/log"),
       { synchronousIsFilePathIgnored, synchronousIsDirectoryPathIgnored } = require("../isIgnored/synchronous"),
       { asynchronousIsFilePathIgnored, asynchronousIsDirectoryPathIgnored } = require("../isIgnored/asynchronous"),
@@ -9,12 +11,12 @@ const { red, green, yellow } = require("../utilities/log"),
 
 const { readDirectory, isEntryDirectory } = fileSystemUtilities;
 
-function processPathsOperation(proceed, abort, context) {
+function findOperation(proceed, abort, context) {
   const { rootDirectoryPaths } = context,
         entryPaths = [  ///
           ...rootDirectoryPaths
         ],
-        synchronous = processEntryPaths(entryPaths, (pathIgnored) => {
+        synchronous = findInEntries(entryPaths, (pathIgnored) => {
           if (pathIgnored === null) {
             abort();
           }
@@ -25,9 +27,9 @@ function processPathsOperation(proceed, abort, context) {
   }
 }
 
-module.exports = processPathsOperation;
+module.exports = findOperation;
 
-function processEntryPaths(entryPaths, callback, context) {
+function findInEntries(entryPaths, callback, context) {
   let synchronous = true;
 
   let entryNamesLength;
@@ -37,7 +39,7 @@ function processEntryPaths(entryPaths, callback, context) {
   while (entryNamesLength > 0) {
     const entryPath = entryPaths.shift();
 
-    synchronous = processEntryPath(entryPath, entryPaths, callback, context);
+    synchronous = findInEntry(entryPath, entryPaths, callback, context);
 
     if (!synchronous) {
       break;
@@ -49,7 +51,7 @@ function processEntryPaths(entryPaths, callback, context) {
   return synchronous;
 }
 
-function processEntryPath(entryPath, entryPaths, callback, context) {
+function findInEntry(entryPath, entryPaths, callback, context) {
   let synchronous;
 
   const path = entryPath,
@@ -58,9 +60,9 @@ function processEntryPath(entryPath, entryPaths, callback, context) {
   if (directory) {
     const directoryPath = entryPath; ///
 
-    synchronous = processDirectoryPath(directoryPath, (pathIgnored) => {
+    synchronous = findInDirectory(directoryPath, (pathIgnored) => {
       const synchronous = (pathIgnored !== null) ?
-                            processEntryPaths(entryPaths, callback, context) :
+                            findInEntries(entryPaths, callback, context) :
                               true;
 
       if (synchronous) {
@@ -70,9 +72,9 @@ function processEntryPath(entryPath, entryPaths, callback, context) {
   } else {
     const filePath = entryPath;  ///
 
-    synchronous = processFilePath(filePath, (pathIgnored) => {
+    synchronous = findInFile(filePath, (pathIgnored) => {
       const synchronous = (pathIgnored !== null) ?
-                            processEntryPaths(entryPaths, callback, context) :
+                            findInEntries(entryPaths, callback, context) :
                               true;
       if (synchronous) {
         callback(pathIgnored);
@@ -81,13 +83,13 @@ function processEntryPath(entryPath, entryPaths, callback, context) {
   }
 
   if (synchronous) {
-    synchronous = processEntryPaths(entryPaths, callback, context);
+    synchronous = findInEntries(entryPaths, callback, context);
   }
 
   return synchronous;
 }
 
-function processFilePath(filePath, callback, context) {
+function findInFile(filePath, callback, context) {
   let synchronous;
 
   const filePathIgnored = synchronousIsFilePathIgnored(filePath, context);
@@ -98,7 +100,7 @@ function processFilePath(filePath, callback, context) {
     const { quietly } = context;
 
     if (!quietly) {
-      const { ruleString } = context;
+      const { ruleString, dryRun } = context;
 
       let message = filePathIgnored ?
                       red(`Ignore ${filePath}`) :
@@ -108,10 +110,8 @@ function processFilePath(filePath, callback, context) {
 
       console.log(message);
 
-      if (!filePathIgnored) {
-        console.log(yellow(`Processing the '${filePath}' file...`));
-
-        ///
+      if (!filePathIgnored && !dryRun) {
+        find(filePath, context);
       }
     }
 
@@ -131,7 +131,7 @@ function processFilePath(filePath, callback, context) {
 
     asynchronousIsFilePathIgnored(filePath, context, (pathIgnored) => {
       const synchronous = (pathIgnored !== null) ?
-                            processFilePath(filePath, callback, context) :
+                            findInFile(filePath, callback, context) :
                               true;
 
       if (synchronous) {
@@ -143,7 +143,7 @@ function processFilePath(filePath, callback, context) {
   return synchronous;
 }
 
-function processDirectoryPath(directoryPath, callback, context) {
+function findInDirectory(directoryPath, callback, context) {
   let synchronous;
 
   const directoryPathIgnored = synchronousIsDirectoryPathIgnored(directoryPath, context);
@@ -185,14 +185,14 @@ function processDirectoryPath(directoryPath, callback, context) {
       const entryNames = readDirectory(directoryPath),
             entryPaths = entryPathsFromEntryNamesAndDirectoryPath(entryNames, directoryPath);
 
-      synchronous = processEntryPaths(entryPaths, callback, context);
+      synchronous = findInEntries(entryPaths, callback, context);
     }
   } else {
     synchronous = false;
 
     asynchronousIsDirectoryPathIgnored(directoryPath, context, (pathIgnored) => {
       const synchronous = (pathIgnored !== null) ?
-                            processDirectoryPath(directoryPath, callback, context) :
+                            findInDirectory(directoryPath, callback, context) :
                               true;
 
       if (synchronous) {

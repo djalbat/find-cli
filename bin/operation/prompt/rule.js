@@ -2,14 +2,14 @@
 
 const { shellUtilities } = require("necessary");
 
-const { validateGlobStringOrPattern } = require("../../utilities/validate"),
+const { ruleFromAnswerAndDirectory } = require("../../utilities/rule"),
+      { validateGlobStringOrPattern } = require("../../utilities/validate"),
       { GLOB_STRING_OR_REGEX_DESCRIPTION } = require("../../descriptions"),
-      { INVALID_GLOB_REGEX_OR_STRING_MESSAGE } = require("../../messages"),
-      { globFromAnswerAndDirectory, stringFromAnswerAndDirectory, patternFromAnswerAndDirectory } = require("../../utilities/prompt");
+      { INVALID_GLOB_REGEX_OR_STRING_MESSAGE } = require("../../messages");
 
 const { prompt } = shellUtilities;
 
-function globStringOrPatternPromptOperation(proceed, abort, context) {
+function rulePromptOperation(proceed, abort, context) {
   const { path, directory } = context,
         description = GLOB_STRING_OR_REGEX_DESCRIPTION,
         errorMessage = INVALID_GLOB_REGEX_OR_STRING_MESSAGE,
@@ -35,18 +35,14 @@ function globStringOrPatternPromptOperation(proceed, abort, context) {
       return;
     }
 
-    const glob = globFromAnswerAndDirectory(answer, directory),
-          string = stringFromAnswerAndDirectory(answer, directory),
-          pattern = patternFromAnswerAndDirectory(answer, directory);
+    const rule = ruleFromAnswerAndDirectory(answer, directory);
 
     Object.assign(context, {
-      glob,
-      string,
-      pattern
+      rule
     });
 
     proceed();
   });
 }
 
-module.exports = globStringOrPatternPromptOperation;
+module.exports = rulePromptOperation;

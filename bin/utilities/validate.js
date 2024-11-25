@@ -1,6 +1,6 @@
 "use strict";
 
-const { globFromAnswerAndDirectory, stringFromAnswerAndDirectory, patternFromAnswerAndDirectory } = require("../utilities/prompt");
+const { ruleFromAnswerAndDirectory } = require("../utilities/rule");
 
 function validateIndex(answer, lastIndex) {
   let valid = true;
@@ -40,10 +40,8 @@ function validateRootDirectoryPath(answer) {
 }
 
 function validateGlobStringOrPattern(answer, directory) {
-  const glob = globFromAnswerAndDirectory(answer, directory),
-        string = stringFromAnswerAndDirectory(answer, directory),
-        pattern = patternFromAnswerAndDirectory(answer, directory),
-        valid = ((glob !== null) || (string !== null) || (pattern !== null));
+  const rule = ruleFromAnswerAndDirectory(answer, directory),
+        valid = (rule !== null)
 
   return valid;
 }
