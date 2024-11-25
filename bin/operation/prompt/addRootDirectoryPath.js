@@ -2,16 +2,24 @@
 
 const { shellUtilities } = require("necessary");
 
-const { validateRootDirectory } = require("../../utilities/validate"),
-      { INVALID_ROOT_DIRECTORY } = require("../../messages"),
+const { validateRootDirectoryPath } = require("../../utilities/validate"),
+      { INVALID_ROOT_DIRECTORY_PATH_MESSAGE } = require("../../messages"),
       { ADD_ROOT_DIRECTORY_PATH_DESCRIPTION } = require("../../descriptions");
 
 const { prompt } = shellUtilities;
 
 function addRootDirectoryPathPromptOperation(proceed, abort, context) {
+  const { rootDirectoryPath } = context;
+
+  if (rootDirectoryPath !== null) {
+    proceed();
+
+    return;
+  }
+
   const description = ADD_ROOT_DIRECTORY_PATH_DESCRIPTION,
-        errorMessage = INVALID_ROOT_DIRECTORY,
-        validationFunction = validateRootDirectory, ///
+        errorMessage = INVALID_ROOT_DIRECTORY_PATH_MESSAGE,
+        validationFunction = validateRootDirectoryPath, ///
         options = {
           description,
           errorMessage,

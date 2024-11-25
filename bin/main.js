@@ -41,9 +41,9 @@ function main(command, argument, options) {
     }
 
     case ADD_ROOT_DIRECTORY_PATH_COMMAND: {
-      const rootDirectory = argument; ///
+      const rootDirectoryPath = argument; ///
 
-      addRootDirectoryPathAction(rootDirectory);
+      addRootDirectoryPathAction(rootDirectoryPath);
 
       break;
     }
@@ -55,7 +55,9 @@ function main(command, argument, options) {
     }
 
     case REMOVE_ROOT_DIRECTORY_PATH_COMMAND: {
-      removeRootDirectoryPathAction();
+      const rootDirectoryPath = argument; ///
+
+      removeRootDirectoryPathAction(rootDirectoryPath);
 
       break;
     }
