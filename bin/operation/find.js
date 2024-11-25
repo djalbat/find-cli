@@ -4,7 +4,7 @@ const { fileSystemUtilities } = require("necessary");
 
 const find = require("../find");
 
-const { red, green, yellow } = require("../utilities/log"),
+const { red, green } = require("../utilities/log"),
       { synchronousIsFilePathIgnored, synchronousIsDirectoryPathIgnored } = require("../isIgnored/synchronous"),
       { asynchronousIsFilePathIgnored, asynchronousIsDirectoryPathIgnored } = require("../isIgnored/asynchronous"),
       { isDirectoryPathRootDirectoryPath, entryPathsFromEntryNamesAndDirectoryPath } = require("../utilities/path");
@@ -100,7 +100,7 @@ function findInFile(filePath, callback, context) {
     const { quietly } = context;
 
     if (!quietly) {
-      const { ruleString, dryRun } = context;
+      const { ruleString } = context;
 
       let message = filePathIgnored ?
                       red(`Ignore ${filePath}`) :
@@ -109,10 +109,6 @@ function findInFile(filePath, callback, context) {
       message = `${message} ${ruleString}`;
 
       console.log(message);
-
-      if (!filePathIgnored && !dryRun) {
-        find(filePath, context);
-      }
     }
 
     if (!filePathIgnored) {
@@ -124,7 +120,11 @@ function findInFile(filePath, callback, context) {
         totalFiles
       });
 
-      ///
+      const { dryRun } = context;
+
+      if (!dryRun) {
+        find(filePath, context);
+      }
     }
   } else {
     synchronous = false;
@@ -166,10 +166,6 @@ function findInDirectory(directoryPath, callback, context) {
         message = `${message} ${ruleString}`;
 
         console.log(message);
-
-        if (!directoryPathIgnored) {
-          console.log(yellow(`Processing the '${directoryPath}' directory...`));
-        }
       }
     }
 

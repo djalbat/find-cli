@@ -1,6 +1,7 @@
 "use strict";
 
-const findOperation = require("../operation/find"),
+const ruleOperation = require("../operation/rule"),
+      findOperation = require("../operation/find"),
       readConfigurationOperation = require("../operation/readConfiguration");
 
 const { executeOperations } = require("../utilities/operation"),
@@ -8,9 +9,11 @@ const { executeOperations } = require("../utilities/operation"),
 
 function findAction(string, dryRun, quietly) {
   const operations = [
+          ruleOperation,
           readConfigurationOperation,
           findOperation
         ],
+        rule = null,
         totalLines = 0,
         totalFiles = 0,
         totalDirectories = 0,
@@ -18,6 +21,7 @@ function findAction(string, dryRun, quietly) {
           string,
           dryRun,
           quietly,
+          rule,
           totalLines,
           totalFiles,
           totalDirectories

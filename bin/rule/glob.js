@@ -61,17 +61,15 @@ class GlobRule {
     return globRule;
   }
 
-  static fromStringAndDirectory(string, directory) {
+  static fromStringAnchoredAndDirectory(string, anchored, directory) {
     let globRule = null;
 
     const glob = globFromStringAndDirectory(string, directory);
 
     if (glob !== null) {
-      const pattern = patternFromGlob(glob);
+      const pattern = patternFromGlobAndAnchored(glob, anchored);
 
-      if (pattern !== null) {
-        globRule = new GlobRule(glob, pattern);
-      }
+      globRule = new GlobRule(glob, pattern);
     }
 
     return globRule;
@@ -80,7 +78,7 @@ class GlobRule {
 
 module.exports = GlobRule;
 
-function patternFromGlob(glob) {
+function patternFromGlobAndAnchored(glob, anchored) {
   let pattern = EMPTY_STRING;
 
   const characters = [ ...glob ];
@@ -101,7 +99,9 @@ function patternFromGlob(glob) {
     }
   }
 
-  pattern = addAnchors(pattern);
+  if (anchored) {
+    pattern = addAnchors(pattern);
+  }
 
   return pattern;
 }
@@ -123,7 +123,8 @@ function globFromStringAndDirectory(string, directory) {
     }
 
     try {
-      const pattern = patternFromGlob(glob);
+      const anchored = false,
+            pattern = patternFromGlobAndAnchored(glob, anchored);
 
       new RegExp(pattern);
     } catch (error) {

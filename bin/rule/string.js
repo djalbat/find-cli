@@ -52,7 +52,7 @@ class StringRule {
     return stringRule;
   }
 
-  static fromStringAndDirectory(string, directory) {
+  static fromStringAnchoredAndDirectory(string, anchored, directory) {
     let stringRule = null;
 
     string = stringFromStringAndDirectory(string, directory); ///

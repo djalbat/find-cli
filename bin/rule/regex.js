@@ -56,10 +56,10 @@ class RegexRule {
     return regexRule;
   }
 
-  static fromStringAndDirectory(string, directory) {
+  static fromStringAnchoredAndDirectory(string, anchored, directory) {
     let regexRule = null;
 
-    const pattern = patternFromStringAndDirectory(string, directory);
+    const pattern = patternFromStringAndDirectory(string, anchored, directory);
 
     if (pattern !== null) {
       regexRule = new RegexRule(pattern);
@@ -71,7 +71,7 @@ class RegexRule {
 
 module.exports = RegexRule;
 
-function patternFromStringAndDirectory(string, directory) {
+function patternFromStringAndDirectory(string, anchored, directory) {
   let pattern;
 
   const stringRegexLiteral = isStringRegexLiteral(string);
@@ -89,7 +89,9 @@ function patternFromStringAndDirectory(string, directory) {
       pattern = addTrailingEscapedForwardSlash(pattern); ///
     }
 
-    pattern = addAnchors(pattern);
+    if (anchored) {
+      pattern = addAnchors(pattern);
+    }
 
     try {
       new RegExp(pattern);

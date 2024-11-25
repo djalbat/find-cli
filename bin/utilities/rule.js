@@ -4,15 +4,15 @@ const GlobRule = require("../rule/glob"),
       RegexRule = require("../rule/regex"),
       StringRule = require("../rule/string");
 
-function ruleFromStringAndDirectory(string, directory) {
-  const globRule = GlobRule.fromStringAndDirectory(string, directory),
-        regexRule = RegexRule.fromStringAndDirectory(string, directory),
-        stringRule = StringRule.fromStringAndDirectory(string, directory),
+function ruleFromStringAnchoredAndDirectory(string, anchored, directory) {
+  const globRule = GlobRule.fromStringAnchoredAndDirectory(string, anchored, directory),
+        regexRule = RegexRule.fromStringAnchoredAndDirectory(string, anchored, directory),
+        stringRule = StringRule.fromStringAnchoredAndDirectory(string, anchored, directory),
         rule = (globRule || regexRule || stringRule);
 
   return rule;
 }
 
 module.exports = {
-  ruleFromStringAndDirectory
+  ruleFromStringAnchoredAndDirectory
 };

@@ -1,6 +1,6 @@
 "use strict";
 
-const { ruleFromStringAndDirectory } = require("../utilities/rule");
+const { ruleFromStringAnchoredAndDirectory } = require("../utilities/rule");
 
 function validateIndex(answer, lastIndex) {
   let valid = true;
@@ -41,7 +41,8 @@ function validateRootDirectoryPath(answer) {
 
 function validateGlobStringOrPattern(answer, directory) {
   const string = answer,  ///
-        rule = ruleFromStringAndDirectory(string, directory),
+        anchored = false,
+        rule = ruleFromStringAnchoredAndDirectory(string, anchored, directory),
         valid = (rule !== null)
 
   return valid;
