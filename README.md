@@ -3,11 +3,11 @@
 An alternative to `grep`.
 
 Find looks for occurrences in files' contents that match a supplied glob, string or regular expression.
-It filters files and directories by way of path matching rules that are also based on globs, strings and regular expressions.
-It is very much like `grep` but it is arguably more user friendly and surprisingly just as fast.
+It filters files and directories by way of configurable path matching rules that are also based on globs, strings and regular expressions.
+It is quite like `grep` but it is arguably more user friendly and surprisingly just as fast.
 
 Find uses globs by default for matching both content and paths.
-Its usage is slightly non-standard but is designed to de-mystify them.
+Its use of them is slightly non-standard but hopefully de-mystifying.
 In fact there is is a section below devoted to how they are converted to regular expressions.
 
 ## Installation
@@ -53,37 +53,39 @@ Options:
 
   --version|-v                             Show the version
 
-  --dry-run|-d                             Traverse the directories and files but do not search
+  --dry-run|-d                             Traverse the directories and files only
 
-  --quietly|-q                             Execute shell commands without printing to the console
+  --quietly|-q                             Do not show the directory and file path matching
 ```
 
 ### Setup
 
-Suppose you want to search the `~/Development` directory.
+Suppose that you want to search your `~/Development` directory.
 First run the following commands:
 
-    cv ~/Development
+    cd ~/Development
     find initialise
 
-This creates a `.findrc` configuration file that under normal circumstances should not be edited by hand.
-Suppose that you also want to search a sibling `~/Sites` directory.
-You can add the additional root directory and see the result with the following commands: 
+This creates a `.findrc` configuration file in the `~/Development` directory that under normal circumstances should not be edited by hand.
+
+Now suppose that you also want to search a sibling `~/Sites` directory.
+You can configure this additional root directory and see the results with the following commands: 
 
     find add-root-directory ../Sites/
     find list-root-directories
 
 ### Path rules
 
-Once you have the directories set up you can start to add the rules that filter the paths of the files and directories that Find searches.
+Once you have the root directories set up you can start to add the rules that filter the file and directory paths.
 Start with a dry run so that there is no need to specify what to search for:
 
     find -d
 
 Find works from four collections of rules for ignoring and permitting file and directory paths.
-It ignores paths first but affords the opportunity to subsequently permit them.
-Every path that it encounters must have a corresponding rule that matches, otherwise Find will prompt you to give one.
-For example, the very first file that it encounters may be its `.findrc` configuration file.
+It ignores paths first but can subsequently permit them.
+It must be able to match a rule to each path that it encounters.
+If not it will prompt you to configure one.
+For example, the very first file that it encounters may be its own `.findrc` configuration file.
 In that case it will ask you whether you want to ignore or permit that path and then prompt you for a glob, string or regular expression to match the path as a whole.
 
     .findrc     // gllob

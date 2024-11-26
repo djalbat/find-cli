@@ -25,9 +25,9 @@ Options:
 
   --version|-v                             Show the version
 
-  --dry-run|-d                             Traverse the directories and files but do not search
+  --dry-run|-d                             Traverse the directories and files only
 
-  --quietly|-q                             Execute shell commands without printing to the console
+  --quietly|-q                             Do not show the directory and file path matching
 
 Further information:
 
