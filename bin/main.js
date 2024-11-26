@@ -63,7 +63,7 @@ function main(command, argument, options) {
     }
 
     case FIND_COMMAND: {
-      if (argument === null) {
+      if ((argument === null) && !dryRun) {
         console.log(NO_ARGUMENT_GIVEN_MESSAGE);
       } else {
         const string = argument;  ///

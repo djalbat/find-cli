@@ -4,7 +4,8 @@ const ruleOperation = require("../operation/rule"),
       findOperation = require("../operation/find"),
       readConfigurationOperation = require("../operation/readConfiguration");
 
-const { executeOperations } = require("../utilities/operation"),
+const { S, EMPTY_STRING } = require("../constants"),
+      { executeOperations } = require("../utilities/operation"),
       { FAILED_FIND_MESSAGE, SUCCESSFUL_FIND_MESSAGE } = require("../messages");
 
 function findAction(string, dryRun, quietly) {
@@ -14,24 +15,25 @@ function findAction(string, dryRun, quietly) {
           findOperation
         ],
         rule = null,
-        totalLines = 0,
-        totalFiles = 0,
-        totalDirectories = 0,
+        lines = [],
+        linesTotal = 0,
+        filesTotal = 0,
+        directoriesTotal = 0,
+        occurrencesTotal = 0,
         context = {
           string,
           dryRun,
           quietly,
           rule,
-          totalLines,
-          totalFiles,
-          totalDirectories
+          lines,
+          linesTotal,
+          filesTotal,
+          directoriesTotal,
+          occurrencesTotal
         };
 
   executeOperations(operations, (completed) => {
-    const { totalLines, totalFiles, totalDirectories } = context,
-          message = `A total of ${totalDirectories} directories, ${totalFiles} files and ${totalLines} lines searched.`;
-
-    console.log(message);
+    logTottals(context);
 
     if (!completed) {
       console.log(FAILED_FIND_MESSAGE);
@@ -39,8 +41,44 @@ function findAction(string, dryRun, quietly) {
       return;
     }
 
+    logLines(context);
+
     console.log(SUCCESSFUL_FIND_MESSAGE);
   }, context);
 }
 
 module.exports = findAction;
+
+function logLines(context) {
+  const { lines } = context;
+
+  let maximumIndexLength = 0,
+      maximumContentLength = 0;
+
+  lines.forEach((line) => {
+    const indexLength = line.getIndexLength(),
+          filePathLength = line.getFilePathLength();
+
+    maximumIndexLength = Math.max(indexLength, maximumIndexLength);
+    maximumContentLength = Math.max(filePathLength, maximumContentLength);
+  });
+
+  const requiredIndexLength = maximumIndexLength, ///
+        requiredContentLength = maximumContentLength; ///
+
+  lines.forEach((line) => {
+    const message = line.asMessage(requiredIndexLength, requiredContentLength);
+
+    console.log(message);
+  });
+}
+
+function logTottals(context) {
+  const { linesTotal, filesTotal, directoriesTotal, occurrencesTotal } = context,
+        optionalS = (occurrencesTotal === 1) ?
+                      EMPTY_STRING :
+                        S,
+        message = `Found ${occurrencesTotal} occurrence${optionalS} across ${directoriesTotal} directories, ${filesTotal} files and ${linesTotal} lines.`;
+
+  console.log(message);
+}

@@ -112,12 +112,12 @@ function findInFile(filePath, callback, context) {
     }
 
     if (!filePathIgnored) {
-      let { totalFiles } = context;
+      let { filesTotal } = context;
 
-      totalFiles++;
+      filesTotal++;
 
       Object.assign(context, {
-        totalFiles
+        filesTotal
       });
 
       const { dryRun } = context;
@@ -170,12 +170,12 @@ function findInDirectory(directoryPath, callback, context) {
     }
 
     if (!directoryPathIgnored) {
-      let { totalDirectories } = context;
+      let { directoriesTotal } = context;
 
-      totalDirectories++;
+      directoriesTotal++;
 
       Object.assign(context, {
-        totalDirectories
+        directoriesTotal
       });
 
       const entryNames = readDirectory(directoryPath),

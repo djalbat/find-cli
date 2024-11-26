@@ -40,17 +40,22 @@ class GlobRule {
     return json;
   }
 
-  find(string) {
-    const occurrences = [];
+  find(line) {
+    const occurrences = [],
+          content = line.getContent();
 
-    let result = string.match(this.regExp);
+    let offset = 0,
+        string = content, ///
+        result = string.match(this.regExp);
 
     while (result !== null) {
-      const occurrence = Occurrence.fromResult(result),
+      const occurrence = Occurrence.fromResultAndOffset(result, offset),
             end = occurrence.getEnd(),
             start = end;  ///
 
       string = string.substring(start); ///
+
+      offset += start;
 
       occurrences.push(occurrence);
 

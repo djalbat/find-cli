@@ -26,17 +26,22 @@ class StringRule {
     return json;
   }
 
-  find(string) {
-    const occurrences = [];
+  find(line) {
+    const occurrences = [],
+          content = line.getContent();
 
-    let index = string.indexOf(this.string);
+    let offset = 0,
+        string = content, ///
+        index = string.indexOf(this.string);
 
     while (index !== -1) {
-      const occurrence = Occurrence.fromIndexAndString(index, string),
+      const occurrence = Occurrence.fromIndexStringAndOffset(index, string, offset),
             end = occurrence.getEnd(),
             start = end;  ///
 
       string = string.substring(start); ///
+
+      offset += start;
 
       occurrences.push(occurrence);
 

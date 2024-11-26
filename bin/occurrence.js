@@ -1,5 +1,7 @@
 "use strict";
 
+const { ZERO } = require("./constants");
+
 class Occurrence {
   constructor(start, end) {
     this.start = start;
@@ -14,20 +16,20 @@ class Occurrence {
     return this.end;
   }
 
-  static fromResult(result) {
+  static fromResultAndOffset(result, offset) {
     const { index } = result,
-          match = result[0],  ///
+          match = result[ZERO],
           length = match.length,
-          start = index,  ///
+          start = index + offset,
           end = start + length,
           occurrence = new Occurrence(start, end);
 
     return occurrence;
   }
 
-  static fromIndexAndString(index, string) {
+  static fromIndexStringAndOffset(index, string, offset) {
     const length = string.length,
-          start = index,  ///
+          start = index + offset,
           end = start + length,
           occurrence = new Occurrence(start, end);
 
