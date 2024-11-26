@@ -102,10 +102,10 @@ For example:
 
     find -q START_OF_CONTENT
     find -q "Query.fromExpression"
-    find -q /"'[^"]+/
+    find -q /"[^"]*"/
 
 The `-q` flag here suppresses the path matching messages.
-Only the cocurrences will be shown once the search is complete.
+Only the occurrences will be shown once the search is complete.
 
 ### Converting globs to regular expressions
 
