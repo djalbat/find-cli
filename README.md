@@ -2,12 +2,13 @@
 
 An alternative to `grep`.
 
-Find looks for occurrences that match a supplied glob, string or regular expression in files' contents.
-It filters files and directories by way of a set of path matching rules also based on globs, strings and regular expressions.
-It is very much like `grep` but is arguably more user friendly and surprisingly just as fast.
+Find looks for occurrences in files' contents that match a supplied glob, string or regular expression.
+It filters files and directories by way of path matching rules that are also based on globs, strings and regular expressions.
+It is very much like `grep` but it is arguably more user friendly and surprisingly just as fast.
 
-Find's use of globs is slightly non-standard but but hopefully to de-mystifies them.
-They are the default for matching but content and paths and there is a section devoted to how Find converts them to regular expressions below.
+Find uses globs by default for matching both content and paths.
+Its usage is slightly non-standard but is designed to de-mystify them.
+In fact there is is a section below devoted to how they are converted to regular expressions.
 
 ## Installation
 
