@@ -2,7 +2,7 @@
 
 const { arrayUtilities } = require("necessary");
 
-const { grey, blue, yellow } = require("./utilities/log"),
+const { grey, blue, yellow, cyan } = require("./utilities/log"),
       { EMPTY_STRING, SINGLE_SPACE } = require("./constants");
 
 const { backwardsForEach } = arrayUtilities;
@@ -128,7 +128,7 @@ class Line {
 
       gap = grey(gap);  ///
 
-      match = blue(match);  ///
+      match = cyan(match);  ///
 
       string = `${string}${match}${gap}`;
     });
@@ -142,7 +142,8 @@ class Line {
     const filePathLength = this.getFilePathLength(),
           paddingLength = requiredFilePathLength - filePathLength,
           padding = paddingFromPaddingLength(paddingLength),
-          formattedFilePath =  `${this.filePath}${padding}`;
+          filePath =  `${this.filePath}${padding}`,
+          formattedFilePath = blue(filePath);
 
     return formattedFilePath;
   }
@@ -151,7 +152,7 @@ class Line {
     const formattedIndex = this.getFormattedIndex(requiredIndexLength),
           formattedContent = this.getFormattedContent(),
           formattedFilePath = this.getFormattedFilePath(requiredFilePathLength),
-          message = `| ${formattedFilePath}  ${formattedIndex} | ${formattedContent}`;
+          message = `${formattedFilePath}  ${formattedIndex} | ${formattedContent}`;
 
     return message;
   }
