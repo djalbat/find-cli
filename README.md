@@ -109,6 +109,28 @@ Only the occurrences will be shown once the search is complete.
 
 ### Converting globs to regular expressions
 
+Find differentiates between directory and file paths and this is important when converting globs.
+Directory paths *must* end with a slash.
+So:
+
+    /        // root directory
+    ./       // current directory
+    ../      // parent directory
+    foo/  
+    foo/bar/
+
+Find will add the trailing slashes when matching directory paths.
+For example:
+
+    Ignore ../Sites/account.xomi.cloud/template/ */template/**/
+
+Note that the root directory has been prepended, but only for the clarity. 
+It is not prepended for matching.
+A trailing slash has been prepended, however, and this has a bearing on how the glob is formulated.
+
+One thing to note is that you do not have to remember to include trailing slashes when prompted for globs, strings or regular expressions ot match directory paths.
+Find will always add them, however.
+
 
 
 ## Contact
