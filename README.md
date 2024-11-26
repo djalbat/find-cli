@@ -87,13 +87,29 @@ It must be able to match a rule to each path that it encounters.
 If not it will prompt you to configure one.
 For example, the very first file that it encounters may be its own `.findrc` configuration file.
 In that case it will ask you whether you want to ignore or permit that path and then prompt you for a glob, string or regular expression to match the path as a whole.
+The choice is yours but globs are the default and do not have delimiters.
 
     .findrc     // gllob
     ".findrc"   // string
-    /\/findrc/  // regular expression
+    /\.findrc/  // regular expression
 
 You may have several thousand files and directories that need matching and wildcards will obviously be needed.
-It can take several minutes to answer all the prompts but you can opt out at any time by 
+It can take several minutes to answer all the prompts but you can opt out at any time by hitting the enter key three times at any prompt.
+A little patience with the process and a couple of tries at it are recommended.
+
+Once the rules are set up there is little more to do other than to search for occurrences, again using globs, strings or regular expressions.
+For example:
+
+   find -q START_OF_CONTENT
+   find -q "Query.fromExpression"
+   find -q /"'[^"]+/
+
+The `-q` flag here suppresses the path matching messages.
+Only the cocurrences will be shown once the search is complete.
+
+### Converting globs to regular expressions
+
+
 
 ## Contact
 
