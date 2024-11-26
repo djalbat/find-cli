@@ -5,8 +5,7 @@ const ruleOperation = require("../operation/rule"),
       readConfigurationOperation = require("../operation/readConfiguration");
 
 const { S, EMPTY_STRING } = require("../constants"),
-      { executeOperations } = require("../utilities/operation"),
-      { FAILED_FIND_MESSAGE, SUCCESSFUL_FIND_MESSAGE } = require("../messages");
+      { executeOperations } = require("../utilities/operation");
 
 function findAction(string, dryRun, quietly) {
   const operations = [
@@ -33,17 +32,13 @@ function findAction(string, dryRun, quietly) {
         };
 
   executeOperations(operations, (completed) => {
-    logTottals(context);
+    logLines(context);
 
     if (!completed) {
-      console.log(FAILED_FIND_MESSAGE);
-
       return;
     }
 
-    logLines(context);
-
-    console.log(SUCCESSFUL_FIND_MESSAGE);
+    logTottals(context);
   }, context);
 }
 
