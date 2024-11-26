@@ -124,14 +124,24 @@ For example:
 
     Ignore ../Sites/account.xomi.cloud/template/ */template/**/
 
-Note that the root directory has been prepended, but only for the clarity. 
-It is not prepended for matching.
-A trailing slash has been prepended, however, and this has a bearing on how the glob is formulated.
+Note that the root directory has been prepended, but only for clarity when showing messages. 
+It is not prepended for the purpose of matching.
+A trailing slash has been prepended, however, and this has a bearing on how the glob is converted.
 
-One thing to note is that you do not have to remember to include trailing slashes when prompted for globs, strings or regular expressions ot match directory paths.
-Find will always add them, however.
+One thing to note is that you do not have to remember to prepend trailing slashes yourself when prompted for globs, strings or regular expressions ot match directory paths.
+Find will always add them.
 
+Although non-standard, The presence of a trailing slash for directory paths means makes the conversion of globs to regular expressions easier.
+Here is a list of some of the conversions:
 
+| `**/`  | `(?:[^/]*\\/)*`  | Repeated directories |
+| `*/`   | `[^/]*\\/`       | Single directory     |
+| `/`    | `\\/`            | Directory            |
+| `**`   | `.*`             | Repeated wildcard    |
+| `*`    | `.+?`            | Single wildcard      |
+
+Character classes and alternatives are also supported. 
+Their conversions are more or less standard.
 
 ## Contact
 
