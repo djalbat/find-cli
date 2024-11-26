@@ -151,7 +151,7 @@ class Line {
     const formattedIndex = this.getFormattedIndex(requiredIndexLength),
           formattedContent = this.getFormattedContent(),
           formattedFilePath = this.getFormattedFilePath(requiredFilePathLength),
-          message = `|${formattedFilePath}  ${formattedIndex}|${formattedContent}`;
+          message = `| ${formattedFilePath}  ${formattedIndex} | ${formattedContent}`;
 
     return message;
   }
