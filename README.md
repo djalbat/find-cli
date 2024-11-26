@@ -100,9 +100,9 @@ A little patience with the process and a couple of tries at it are recommended.
 Once the rules are set up there is little more to do other than to search for occurrences, again using globs, strings or regular expressions.
 For example:
 
-   find -q START_OF_CONTENT
-   find -q "Query.fromExpression"
-   find -q /"'[^"]+/
+    find -q START_OF_CONTENT
+    find -q "Query.fromExpression"
+    find -q /"'[^"]+/
 
 The `-q` flag here suppresses the path matching messages.
 Only the cocurrences will be shown once the search is complete.
