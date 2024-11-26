@@ -134,13 +134,13 @@ Find will always add them.
 Although non-standard, The presence of a trailing slash for directory paths means makes the conversion of globs to regular expressions easier.
 Here is a list of some of the conversions:
 
-|--------|------------------|----------------------|
-| `**/`  | `(?:[^/]*\\/)*`  | Repeated directories |
-| `*/`   | `[^/]*\\/`       | Single directory     |
-| `/`    | `\\/`            | Directory            |
-| `**`   | `.*`             | Repeated wildcard    |
-| `*`    | `.+?`            | Single wildcard      |
-|--------|------------------|----------------------|
+| Glob  | Regular expression | Description          |
+|-------|--------------------|----------------------|
+| `**/` | `(?:[^/]*\\/)*`    | Repeated directories |
+| `*/`  | `[^/]*\\/`         | Single directory     |
+| `/`   | `\\/`              | Directory            |
+| `**`  | `.*`               | Repeated wildcard    |
+| `*`   | `.+?`              | Single wildcard      |
 
 Character classes and alternatives are also supported. 
 Their conversions are more or less standard.
