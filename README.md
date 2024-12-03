@@ -177,16 +177,16 @@ find -qi
 
 This will allow you to input `"START_OF_CONTENT"` by hand, so to speak. Since Node is now reading `stdin` rather than a parsed command string, the quotes will remain.
 
-2. Use the `-s` flag thus:
+2. Use the `-s` flag:
 
 ```
 find -qs START_OF_CONTENT
 ```
 
-This coerces Find into treating the argument as a string regardless of the missing double quotes.
+This coerces Find into treating the argument as a string irregardless of the missing double quotes.
 
-There is also the `-r` flag for regular expressions if you do not want to type the `/` regular expression delimiters. 
-The `-g` flag for globs is also provided for the sake of completeness but since globs are the default it is never really needed.
+There is also the `-r` flag for regular expressions if you do not want to type the `/` regular expression delimiters, by the way. 
+And lastly, the `-g` flag for globs is provided for the sake of completeness but since globs are the default it is never really needed.
 
 ## Contact
 
