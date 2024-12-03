@@ -7,7 +7,7 @@ const Line = require("./line");
 const { readFile } = fileSystemUtilities;
 
 function find(filePath, context) {
-  const { rule } = context,
+  const { rule, format } = context,
         content = readFile(filePath),
         lines = linesFromContentAndFilePath(content, filePath);
 
@@ -26,11 +26,17 @@ function find(filePath, context) {
         occurrencesTotal
       });
 
-      const { lines } = context;
-
-      lines.push(line);
-
       line.setOccurrences(occurrences);
+
+      if (!format) {
+        const message = line.asMessage();
+
+        console.log(message);
+      } else {
+        const { lines } = context;
+
+        lines.push(line);
+      }
     }
 
     linesTotal++;

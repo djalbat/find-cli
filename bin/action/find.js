@@ -7,7 +7,7 @@ const ruleOperation = require("../operation/rule"),
 const { S, EMPTY_STRING } = require("../constants"),
       { executeOperations } = require("../utilities/operation");
 
-function findAction(string, dryRun, quietly) {
+function findAction(string, dryRun, format, quietly) {
   const operations = [
           ruleOperation,
           readConfigurationOperation,
@@ -22,6 +22,7 @@ function findAction(string, dryRun, quietly) {
         context = {
           string,
           dryRun,
+          format,
           quietly,
           rule,
           lines,
@@ -32,13 +33,15 @@ function findAction(string, dryRun, quietly) {
         };
 
   executeOperations(operations, (completed) => {
-    logLines(context);
+    if (format) {
+      logLines(context);
+    }
 
     if (!completed) {
       return;
     }
 
-    logTottals(context);
+    logTotals(context);
   }, context);
 }
 
@@ -62,13 +65,13 @@ function logLines(context) {
         requiredContentLength = maximumContentLength; ///
 
   lines.forEach((line) => {
-    const message = line.asMessage(requiredIndexLength, requiredContentLength);
+    const formattedMessage = line.asFormattedMessage(requiredIndexLength, requiredContentLength);
 
-    console.log(message);
+    console.log(formattedMessage);
   });
 }
 
-function logTottals(context) {
+function logTotals(context) {
   const { linesTotal, filesTotal, directoriesTotal, occurrencesTotal } = context,
         optionalS = (occurrencesTotal === 1) ?
                       EMPTY_STRING :

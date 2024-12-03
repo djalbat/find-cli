@@ -56,6 +56,8 @@ Options:
   --dry-run|-d                             Traverse the directories and files only
 
   --quietly|-q                             Do not show the directory and file path matching
+
+  --format|-f                              Formatted output, shown only once the search completes.
 ```
 
 ### Setup

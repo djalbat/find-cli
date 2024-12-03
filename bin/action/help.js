@@ -29,6 +29,8 @@ Options:
 
   --quietly|-q                             Do not show the directory and file path matching
 
+  --format|-f                              Formatted output, shown only once the search completes.
+
 Further information:
 
 Please see the readme file on GitHub:

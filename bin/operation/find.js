@@ -100,11 +100,19 @@ function findInFile(filePath, callback, context) {
     const { quietly } = context;
 
     if (!quietly) {
-      const { ruleString } = context;
+      let message;
 
-      let message = filePathIgnored ?
-                      red(`Ignore ${filePath}`) :
-                        green(`Permit ${filePath}`);
+      const { format, ruleString } = context;
+
+      message = filePathIgnored ?
+                  `Ignore ${filePath}`:
+                    `Permit ${filePath}`;
+
+      if (format) {
+        message = filePathIgnored ?
+                    red(message) :
+                      green(message);
+      }
 
       message = `${message} ${ruleString}`;
 
@@ -157,11 +165,19 @@ function findInDirectory(directoryPath, callback, context) {
       const { quietly } = context;
 
       if (!quietly) {
-        const { ruleString } = context;
+        let message;
 
-        let message = directoryPathIgnored ?
-                        red(`Ignore ${directoryPath}/`) :
-                          green(`Permit ${directoryPath}/`);
+        const { format, ruleString } = context;
+
+        message = directoryPathIgnored ?
+                   `Ignore ${directoryPath}/` :
+                     `Permit ${directoryPath}/`;
+
+        if (format) {
+          message = directoryPathIgnored ?
+                      red(message) :
+                        green(message);
+        }
 
         message = `${message} ${ruleString}`;
 
