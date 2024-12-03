@@ -155,6 +155,39 @@ Here is a list of some of the conversions:
 Character classes and alternatives are also supported. 
 Their conversions are more or less standard.
 
+### Command line considerations
+
+Node is only supplied with the parsed command string and since shells remove double quotes, the following...
+
+    find -q "START_OF_CONTENT"
+
+...may as well be:
+
+    find -q START_OF_CONTENT
+
+In either case the argument will be treated as a glob because Find does not see any double quotes.
+
+There are two ways around this.
+
+1. You can use the interactive mode:
+
+```
+find -qi
+```
+
+This will allow you to input `"START_OF_CONTENT"` by hand, so to speak. Since Node is now reading `stdin` rather than a parsed command string, the quotes will remain.
+
+2. Use the `-s` flag thus:
+
+```
+find -qs START_OF_CONTENT
+```
+
+This coerces Find into treating the argument as a string regardless of the missing double quotes.
+
+There is also the `-r` flag for regular expressions if you do not want to type the `/` regular expression delimiters. 
+The `-g` flag for globs is also provided for the sake of completeness but since globs are the default it is never really needed.
+
 ## Contact
 
 * james.smith@djalbat.com
