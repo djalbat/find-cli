@@ -2,19 +2,23 @@
 
 const ruleOperation = require("../operation/rule"),
       findOperation = require("../operation/find"),
+      rulePromptOperation = require("../operation/prompt/rule"),
       readConfigurationOperation = require("../operation/readConfiguration");
 
 const { S, EMPTY_STRING } = require("../constants"),
       { executeOperations } = require("../utilities/operation");
 
-function findAction(string, dryRun, format, quietly) {
+function findAction(string, dryRun, format, quietly, interactive) {
   const operations = [
           ruleOperation,
+          rulePromptOperation,
           readConfigurationOperation,
           findOperation
         ],
         rule = null,
         lines = [],
+        anchored = false,
+        directory = false,
         linesTotal = 0,
         filesTotal = 0,
         directoriesTotal = 0,
@@ -24,8 +28,11 @@ function findAction(string, dryRun, format, quietly) {
           dryRun,
           format,
           quietly,
+          interactive,
           rule,
           lines,
+          anchored,
+          directory,
           linesTotal,
           filesTotal,
           directoriesTotal,

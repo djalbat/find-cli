@@ -39,9 +39,8 @@ function validateRootDirectoryPath(answer) {
   return valid;
 }
 
-function validateGlobStringOrPattern(answer, directory) {
+function validateGlobStringOrPattern(answer, anchored, directory) {
   const string = answer,  ///
-        anchored = false,
         rule = ruleFromStringAnchoredAndDirectory(string, anchored, directory),
         valid = (rule !== null)
 

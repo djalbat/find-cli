@@ -2,20 +2,36 @@
 
 const { shellUtilities } = require("necessary");
 
-const { ruleFromStringAnchoredAndDirectory } = require("../../utilities/rule"),
-      { validateGlobStringOrPattern } = require("../../utilities/validate"),
+const { validateGlobStringOrPattern } = require("../../utilities/validate"),
       { GLOB_STRING_OR_REGEX_DESCRIPTION } = require("../../descriptions"),
+      { ruleFromStringAnchoredAndDirectory } = require("../../utilities/rule"),
       { INVALID_GLOB_REGEX_OR_STRING_MESSAGE } = require("../../messages");
 
 const { prompt } = shellUtilities;
 
 function rulePromptOperation(proceed, abort, context) {
-  const { path, directory } = context,
+  const { dryRun } = context;
+
+  if (dryRun) {
+    proceed();
+
+    return;
+  }
+
+  const { interactive } = context;
+
+  if (!interactive) {
+    proceed();
+
+    return;
+  }
+
+  const { path, anchored, directory } = context,
         description = GLOB_STRING_OR_REGEX_DESCRIPTION,
         errorMessage = INVALID_GLOB_REGEX_OR_STRING_MESSAGE,
         initialAnswer = path,  ///
         validationFunction = (answer) => {
-          const valid = validateGlobStringOrPattern(answer, directory);
+          const valid = validateGlobStringOrPattern(answer, anchored, directory);
 
           return valid;
         },
@@ -36,7 +52,6 @@ function rulePromptOperation(proceed, abort, context) {
     }
 
     const string = answer,  ///
-          anchored = true,
           rule = ruleFromStringAnchoredAndDirectory(string, anchored, directory);
 
     Object.assign(context, {

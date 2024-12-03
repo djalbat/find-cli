@@ -11,9 +11,15 @@ function ruleOperation(proceed, abort, context) {
     return;
   }
 
-  const { string } = context,
-        directory = false,
-        anchored = false,
+  const { interactive } = context;
+
+  if (interactive) {
+    proceed();
+
+    return;
+  }
+
+  const { string, anchored, directory } = context,
         rule = ruleFromStringAnchoredAndDirectory(string, anchored, directory);
 
   if (rule === null) {

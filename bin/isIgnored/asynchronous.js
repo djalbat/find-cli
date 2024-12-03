@@ -37,12 +37,18 @@ function asynchronousIsPathIgnored(path, directory, context, callback) {
           updatePathRulesOperation
         ],
         rule = null,
+        dryRun = false,
+        anchored = true,
+        interactive = true,
         pathIgnored = null;
 
   Object.assign(context, {
-    rule,
     path,
     directory,
+    rule,
+    dryRun,
+    anchored,
+    interactive,
     pathIgnored
   });
 

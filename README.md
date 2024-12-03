@@ -58,6 +58,14 @@ Options:
   --quietly|-q                             Do not show the directory and file path matching
 
   --format|-f                              Formatted output, shown only once the search completes.
+
+  --glob|-g                                Treat the argument as a glob, which is the default.
+
+  --regex|-g                               Treat the argument as a regular expression.
+
+  --string|-s                              Treat the argument as a string.
+
+  --interactive|-i                         Interactive mode, allowing the argument to be provided via stdin.
 ```
 
 ### Setup

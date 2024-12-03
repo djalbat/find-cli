@@ -31,6 +31,14 @@ Options:
 
   --format|-f                              Formatted output, shown only once the search completes.
 
+  --glob|-g                                Treat the argument as a glob, which is the default.
+
+  --regex|-g                               Treat the argument as a regular expression.
+
+  --string|-s                              Treat the argument as a string.
+
+  --interactive|-i                         Interactive mode, allowing the argument to be provided via stdin.
+
 Further information:
 
 Please see the readme file on GitHub:
