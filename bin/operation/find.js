@@ -19,7 +19,11 @@ function findOperation(proceed, abort, context) {
         synchronous = findInEntries(entryPaths, (pathIgnored) => {
           if (pathIgnored === null) {
             abort();
+
+            return;
           }
+
+          proceed();
         }, context);
 
   if (synchronous) {

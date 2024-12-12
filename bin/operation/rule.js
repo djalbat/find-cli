@@ -19,7 +19,9 @@ function ruleOperation(proceed, abort, context) {
     return;
   }
 
-  const { string, anchored, directory } = context,
+  const { string } = context,
+        anchored = true,
+        directory = false,
         rule = ruleFromStringAnchoredAndDirectory(string, anchored, directory);
 
   if (rule === null) {

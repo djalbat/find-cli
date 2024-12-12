@@ -6,28 +6,28 @@ const { updateIgnoredFilePathRules,
         updatePermittedDirectoryPathRules } = require("../configuration");
 
 function updatePathRulesOperation(proceed, abort, context) {
-  const { rule, directory, pathIgnored } = context;
+  const { pathRule, directory, pathIgnored } = context;
 
   pathIgnored ?
-    addIgnoreRule(rule, directory, context) :
-      addPermitRule(rule, directory, context);
+    addIgnoreRule(pathRule, directory, context) :
+      addPermitRule(pathRule, directory, context);
 
   proceed();
 }
 
 module.exports = updatePathRulesOperation;
 
-function addIgnoreRule(rule, directory, context) {
+function addIgnoreRule(pathRule, directory, context) {
   if (directory) {
     const { ignoredDirectoryPathRules } = context,
-          ignoredDirectoryPathRule = rule;  ///
+          ignoredDirectoryPathRule = pathRule;  ///
 
     ignoredDirectoryPathRules.push(ignoredDirectoryPathRule);
 
     updateIgnoredDirectoryPathRules(ignoredDirectoryPathRules);
   } else {
     const { ignoredFilePathRules } = context,
-          ignoredFilePathRule = rule;  ///
+          ignoredFilePathRule = pathRule;  ///
 
     ignoredFilePathRules.push(ignoredFilePathRule);
 
@@ -35,17 +35,17 @@ function addIgnoreRule(rule, directory, context) {
   }
 }
 
-function addPermitRule(rule, directory, context) {
+function addPermitRule(pathRule, directory, context) {
   if (directory) {
     const { permittedDirectoryPathRules } = context,
-          permittedDirectoryPathRule = rule;  ///
+          permittedDirectoryPathRule = pathRule;  ///
 
     permittedDirectoryPathRules.push(permittedDirectoryPathRule);
 
     updatePermittedDirectoryPathRules(permittedDirectoryPathRules);
   } else {
     const { permittedFilePathRules } = context,
-          permittedFilePathRule = rule;  ///
+          permittedFilePathRule = pathRule;  ///
 
     permittedFilePathRules.push(permittedFilePathRule);
 
