@@ -4,7 +4,7 @@ const Occurrence = require("../occurrence");
 
 const { STRING_TYPE } = require("../types"),
       { isStringStringLiteral } = require("../utilities/literal"),
-      { addDoubleQuotes, removeDoubleQuotes, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
+      { removeDoubleQuotes, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
 
 class StringRule {
   constructor(string) {
@@ -32,10 +32,11 @@ class StringRule {
 
     let offset = 0,
         string = content, ///
-        index = string.indexOf(this.string);
+        index = string.indexOf(this.string),
+        length = this.string.length;
 
     while (index !== -1) {
-      const occurrence = Occurrence.fromIndexStringAndOffset(index, string, offset),
+      const occurrence = Occurrence.fromIndexLengthAndOffset(index, length, offset),
             end = occurrence.getEnd(),
             start = end;  ///
 
@@ -45,18 +46,14 @@ class StringRule {
 
       occurrences.push(occurrence);
 
-      index = string.match(this.regExp);
+      index = string.indexOf(this.string);
     }
 
     return occurrences;
   }
 
   match(string) {
-    this.string = removeDoubleQuotes(this.string);  ///
-
     const matches = (this.string === string);
-
-    this.string = addDoubleQuotes(this.string); ///
 
     return matches;
   }
@@ -107,8 +104,6 @@ function stringFromStringAndDirectory(string, directory) {
     if (directory) {
       string = addTrailingForwardSlash(string); ///
     }
-
-    string = addDoubleQuotes(string); ///
   } else {
     string = null;
   }

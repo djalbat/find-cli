@@ -27,9 +27,8 @@ class Occurrence {
     return occurrence;
   }
 
-  static fromIndexStringAndOffset(index, string, offset) {
-    const length = string.length,
-          start = index + offset,
+  static fromIndexLengthAndOffset(index, length, offset) {
+    const start = index + offset,
           end = start + length,
           occurrence = new Occurrence(start, end);
 

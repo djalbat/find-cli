@@ -6,8 +6,6 @@ function addAnchors(string) { return `^${string}$`; }
 
 function removeAnchors(string) { return string.replace(/(^\^|\$$)/g, EMPTY_STRING); }
 
-function addDoubleQuotes(string) { return `"${string}"`; }
-
 function addForwardSlashes(string) { return `/${string}/`; }
 
 function removeDoubleQuotes(string) { return string.replace(/(^"|"$)/g, EMPTY_STRING); }
@@ -25,7 +23,6 @@ function removeTrailingEscapedForwardSlash(string) { return string.replace(/(\\\
 module.exports = {
   addAnchors,
   removeAnchors,
-  addDoubleQuotes,
   addForwardSlashes,
   removeDoubleQuotes,
   removeForwardSlashes,
