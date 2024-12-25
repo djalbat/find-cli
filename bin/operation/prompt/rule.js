@@ -2,7 +2,8 @@
 
 const { shellUtilities } = require("necessary");
 
-const { validateGlobStringOrPattern } = require("../../utilities/validate"),
+const { EMPTY_STRING } = require("../../constants"),
+      { validateGlobStringOrPattern } = require("../../utilities/validate"),
       { GLOB_STRING_OR_REGEX_DESCRIPTION } = require("../../descriptions"),
       { ruleFromStringAnchoredAndDirectory } = require("../../utilities/rule"),
       { INVALID_GLOB_REGEX_OR_STRING_MESSAGE } = require("../../messages");
@@ -31,7 +32,11 @@ function rulePromptOperation(proceed, abort, context) {
         errorMessage = INVALID_GLOB_REGEX_OR_STRING_MESSAGE,
         initialAnswer = path,  ///
         validationFunction = (answer) => {
-          const valid = validateGlobStringOrPattern(answer, anchored, directory);
+          let valid = false;
+
+          if (answer !== EMPTY_STRING) {
+            valid = validateGlobStringOrPattern(answer, anchored, directory);
+          }
 
           return valid;
         },
