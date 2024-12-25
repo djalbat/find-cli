@@ -2,6 +2,7 @@
 
 const S = "s",
       ZERO = 0,
+      DATA = "data",
       FIND = "find",
       FILE = "file",
       G_FLAG = "g",
@@ -14,6 +15,7 @@ const S = "s",
 module.exports = {
   S,
   ZERO,
+  DATA,
   FIND,
   FILE,
   G_FLAG,

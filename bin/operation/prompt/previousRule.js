@@ -1,6 +1,7 @@
 "use strict";
 
-const { retrievePreviousRules } = require("../../configuration"),
+const { selectPreviousRule } = require("../../utilities/prompt"),
+      { retrievePreviousRules } = require("../../configuration"),
       { NO_PREVIOUS_RULES_MESSAGE } = require("../../messages");
 
 function previousRulePromptOperation(proceed, abort, context) {
@@ -31,7 +32,21 @@ function previousRulePromptOperation(proceed, abort, context) {
     return;
   }
 
-  debugger
+  selectPreviousRule(previousRules, (previousRule) => {
+    if (previousRule === null) {
+      abort();
+
+      return;
+    }
+
+    const rule = previousRule;  ///
+
+    Object.assign(context, {
+      rule
+    });
+
+    proceed();
+  });
 }
 
 module.exports = previousRulePromptOperation;

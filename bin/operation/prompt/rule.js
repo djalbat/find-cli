@@ -27,10 +27,9 @@ function rulePromptOperation(proceed, abort, context) {
     return;
   }
 
-  const { path, anchored, directory } = context,
+  const { rule, anchored, directory } = context,
         description = GLOB_STRING_OR_REGEX_DESCRIPTION,
         errorMessage = INVALID_GLOB_REGEX_OR_STRING_MESSAGE,
-        initialAnswer = path,  ///
         validationFunction = (answer) => {
           let valid = false;
 
@@ -43,9 +42,17 @@ function rulePromptOperation(proceed, abort, context) {
         options = {
           description,
           errorMessage,
-          initialAnswer,
           validationFunction
         };
+
+  if (rule !== null) {
+    const ruleString = rule.asString(),
+          initialAnswer = ruleString; ///
+
+    Object.assign(options, {
+      initialAnswer
+    });
+  }
 
   prompt(options, (answer) => {
     const valid = (answer !== null);

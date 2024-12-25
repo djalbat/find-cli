@@ -80,7 +80,9 @@ class StringRule {
   }
 
   asString() {
-    return this.string;
+    const string = `"${this.string}"`;
+
+    return string;
   }
 
   static fromJSON(json) {
