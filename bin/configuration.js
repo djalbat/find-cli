@@ -7,13 +7,14 @@ const GlobRule = require("./rule/glob"),
       StringRule = require("./rule/string");
 
 const { FIND } = require("./constants"),
-      { createConfiguration } = require("./configuration/version_1_4"),
+      { createConfiguration } = require("./configuration/version_1_7"),
       { migrateConfigurationToVersion_1_1 } = require("./configuration/version_1_1"),
       { migrateConfigurationToVersion_1_2 } = require("./configuration/version_1_2"),
       { migrateConfigurationToVersion_1_3 } = require("./configuration/version_1_3"),
       { migrateConfigurationToVersion_1_4 } = require("./configuration/version_1_4"),
+      { migrateConfigurationToVersion_1_7 } = require("./configuration/version_1_7"),
       { CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE } = require("./messages"),
-      { VERSION_1_0, VERSION_1_1, VERSION_1_2, VERSION_1_3, VERSION_1_4 } = require("./versions");
+      { VERSION_1_0, VERSION_1_1, VERSION_1_2, VERSION_1_3, VERSION_1_4, VERSION_1_7 } = require("./versions");
 
 const { rc } = configurationUtilities,
       { migrate } = versionUtilities,
@@ -26,6 +27,18 @@ function retrieveRootDirectoryPaths() {
         { rootDirectoryPaths } = configuration;
 
   return rootDirectoryPaths;
+}
+
+function retrievePreviousRules() {
+  const configuration = readConfigurationFile();
+
+  let { previousRules } = configuration;
+
+  const previousRulesJSON = previousRules;  ///
+
+  previousRules = rulesFromPathRulesJSON(previousRulesJSON);
+
+  return previousRules;
 }
 
 function retrieveIgnoredFilePathRules() {
@@ -79,6 +92,16 @@ function retrievePermittedDirectoryPathRules() {
 function updateRootDirectoryPaths(rootDirectoryPaths) {
   updateConfigurationFile({
     rootDirectoryPaths
+  });
+}
+
+function updatePreviousRules(previousRules) {
+  const previousRulesJSON = rulesJSONFromRules(previousRules);
+
+  previousRules = previousRulesJSON;  ///
+
+  updateConfigurationFile({
+    previousRules
   });
 }
 
@@ -138,9 +161,10 @@ function migrateConfigurationFile() {
           [ VERSION_1_0 ]: migrateConfigurationToVersion_1_1,
           [ VERSION_1_1 ]: migrateConfigurationToVersion_1_2,
           [ VERSION_1_2 ]: migrateConfigurationToVersion_1_3,
-          [ VERSION_1_3 ]: migrateConfigurationToVersion_1_4
+          [ VERSION_1_3 ]: migrateConfigurationToVersion_1_4,
+          [ VERSION_1_4 ]: migrateConfigurationToVersion_1_7
         },
-        latestVersion = VERSION_1_4;
+        latestVersion = VERSION_1_7;
 
   json = migrate(json, migrationMap, latestVersion);
 
@@ -166,10 +190,12 @@ function assertConfigurationFileExists() {
 
 module.exports = {
   retrieveRootDirectoryPaths,
+  retrievePreviousRules,
   retrieveIgnoredFilePathRules,
   retrievePermittedFilePathRules,
   retrieveIgnoredDirectoryPathRules,
   retrievePermittedDirectoryPathRules,
+  updatePreviousRules,
   updateRootDirectoryPaths,
   updateIgnoredFilePathRules,
   updatePermittedFilePathRules,

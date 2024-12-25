@@ -1,7 +1,6 @@
 "use strict";
 
-const { VERSION_1_4 } = require("../versions"),
-      { ROOT_DIRECTORY_PATH } = require("../constants");
+const { VERSION_1_4 } = require("../versions");
 
 function migrateConfigurationToVersion_1_4(configuration) {
   const { ignoredFilePathMatchers,
@@ -31,28 +30,6 @@ function migrateConfigurationToVersion_1_4(configuration) {
   return configuration;
 }
 
-function createConfiguration() {
-  const version = VERSION_1_4,  ///
-        rootDirectoryPaths = [
-          ROOT_DIRECTORY_PATH
-        ],
-        ignoredFilePathRules = [],
-        permittedFilePathRules = [],
-        ignoredDirectoryPathRules = [],
-        permittedDirectoryPathRules = [],
-        configuration = {
-          version,
-          rootDirectoryPaths,
-          ignoredFilePathRules,
-          permittedFilePathRules,
-          ignoredDirectoryPathRules,
-          permittedDirectoryPathRules
-        };
-
-  return configuration;
-}
-
 module.exports = {
-  createConfiguration,
   migrateConfigurationToVersion_1_4
 };

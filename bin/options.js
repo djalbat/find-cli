@@ -8,6 +8,7 @@ const HELP_OPTION = "help",
       VERSION_OPTION = "version",
       QUIETLY_OPTION = "quietly",
       DRY_RUN_OPTION = "dry-run",
+      PREVIOUS_OPTION = "previous",
       INTERACTIVE_OPTION = "interactive";
 
 module.exports = {
@@ -19,5 +20,6 @@ module.exports = {
   VERSION_OPTION,
   QUIETLY_OPTION,
   DRY_RUN_OPTION,
+  PREVIOUS_OPTION,
   INTERACTIVE_OPTION
 };

@@ -1,8 +1,9 @@
 "use strict";
 
 const NO_ARGUMENT_GIVEN_MESSAGE = "No argument has been given.",
-      COMMAND_NOT_RECOGNISED_MESSAGE = "The command is not recognised.",
+      NO_PREVIOUS_RULES_MESSAGE = "There are no previous rules.",
       NO_ROOT_DIRECTORY_PATHS_MESSAGE = "There are no root directory paths bar the default one.",
+      COMMAND_NOT_RECOGNISED_MESSAGE = "The command is not recognised.",
       CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE = "The action cannot be performed because the configuration file is missing. Run 'find initialise' to create one.",
       INVALID_IGNORE_OR_PERMIT_MESSAGE = "You must answer (i)gnore or (p)ermit.",
       INVALID_ROOT_DIRECTORY_PATH_MESSAGE = "Additional root directories must be globs of the form '../**/'.",
@@ -17,8 +18,9 @@ const NO_ARGUMENT_GIVEN_MESSAGE = "No argument has been given.",
 
 module.exports = {
   NO_ARGUMENT_GIVEN_MESSAGE,
-  COMMAND_NOT_RECOGNISED_MESSAGE,
+  NO_PREVIOUS_RULES_MESSAGE,
   NO_ROOT_DIRECTORY_PATHS_MESSAGE,
+  COMMAND_NOT_RECOGNISED_MESSAGE,
   CONFIGURATION_FILE_DOES_NOT_EXIST_MESSAGE,
   INVALID_IGNORE_OR_PERMIT_MESSAGE,
   INVALID_ROOT_DIRECTORY_PATH_MESSAGE,

@@ -7,6 +7,7 @@ const DEFAULT_HELP = false,
       DEFAULT_VERSION = false,
       DEFAULT_DRY_RUN = false,
       DEFAULT_QUIETLY = false,
+      DEFAULT_PREVIOUS = false,
       DEFAULT_INTERACTIVE = false;
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
   DEFAULT_VERSION,
   DEFAULT_DRY_RUN,
   DEFAULT_QUIETLY,
+  DEFAULT_PREVIOUS,
   DEFAULT_INTERACTIVE
 };

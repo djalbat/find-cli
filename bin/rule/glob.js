@@ -9,10 +9,15 @@ const { GLOB_TYPE } = require("../types"),
       { addAnchors, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
 
 class GlobRule {
-  constructor(glob, pattern, regExp) {
+  constructor(type, glob, pattern, regExp) {
+    this.type = type;
     this.glob = glob;
     this.pattern = pattern;
     this.regExp = regExp;
+  }
+
+  getType() {
+    return this.type;
   }
 
   getGlob() {
@@ -28,7 +33,7 @@ class GlobRule {
   }
 
   toJSON() {
-    const type = GLOB_TYPE,
+    const type = this.type,
           glob = this.glob,
           pattern = this.pattern,
           json = {
@@ -71,6 +76,22 @@ class GlobRule {
     return matches;
   }
 
+  isEqualTo(rule) {
+    let equalTo = false;
+
+    const ruleType = rule.getType();
+
+    if (ruleType === this.type) {
+      const ruleGlob = rule.getGlob();
+
+      if (ruleGlob === this.glob) {
+        equalTo = true;
+      }
+    }
+
+    return equalTo;
+  }
+
   asString() {
     const string = this.glob; ///
 
@@ -86,7 +107,7 @@ class GlobRule {
       const { glob, pattern } = json,
             regExp = new RegExp(pattern);
 
-      globRule = new GlobRule(glob, pattern, regExp);
+      globRule = new GlobRule(type, glob, pattern, regExp);
     }
 
     return globRule;
@@ -98,10 +119,11 @@ class GlobRule {
     const glob = globFromStringAndDirectory(string, directory);
 
     if (glob !== null) {
-      const pattern = patternFromGlobAndAnchored(glob, anchored),
+      const type = GLOB_TYPE,
+            pattern = patternFromGlobAndAnchored(glob, anchored),
             regExp = new RegExp(pattern);
 
-      globRule = new GlobRule(glob, pattern, regExp);
+      globRule = new GlobRule(type, glob, pattern, regExp);
     }
 
     return globRule;

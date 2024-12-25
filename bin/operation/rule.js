@@ -11,9 +11,9 @@ function ruleOperation(proceed, abort, context) {
     return;
   }
 
-  const { interactive } = context;
+  const { previous, interactive } = context;
 
-  if (interactive) {
+  if (previous || interactive) {
     proceed();
 
     return;

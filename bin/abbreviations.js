@@ -1,6 +1,15 @@
 "use strict";
 
-const { HELP_OPTION, GLOB_OPTION, REGEX_OPTION, STRING_OPTION, FORMAT_OPTION, VERSION_OPTION, DRY_RUN_OPTION, QUIETLY_OPTION, INTERACTIVE_OPTION } = require("./options");
+const { HELP_OPTION,
+        GLOB_OPTION,
+        REGEX_OPTION,
+        STRING_OPTION,
+        FORMAT_OPTION,
+        VERSION_OPTION,
+        DRY_RUN_OPTION,
+        QUIETLY_OPTION,
+        PREVIOUS_OPTION,
+        INTERACTIVE_OPTION } = require("./options");
 
 module.exports = {
   "h": HELP_OPTION,
@@ -11,5 +20,6 @@ module.exports = {
   "v": VERSION_OPTION,
   "d": DRY_RUN_OPTION,
   "q": QUIETLY_OPTION,
+  "p": PREVIOUS_OPTION,
   "i": INTERACTIVE_OPTION
 };

@@ -37,6 +37,8 @@ Options:
 
   --string|-s                              Treat the argument as a string.
 
+  --previous|-p                            Give a choice of previous rules.
+
   --interactive|-i                         Interactive mode, allowing the argument to be provided via stdin.
 
 Further information:

@@ -12,9 +12,14 @@ const { REGEX_TYPE } = require("../types"),
         removeTrailingEscapedForwardSlash } = require("../utilities/string");
 
 class RegexRule {
-  constructor(pattern, regExp) {
+  constructor(type, pattern, regExp) {
+    this.type = type;
     this.pattern = pattern;
     this.regExp = regExp;
+  }
+
+  getType() {
+    return this.type;
   }
 
   getPattern() {
@@ -26,7 +31,7 @@ class RegexRule {
   }
 
   toJSON() {
-    const type = REGEX_TYPE,
+    const type = this.type,
           pattern = this.pattern,
           json = {
             type,
@@ -67,6 +72,22 @@ class RegexRule {
     return matches;
   }
 
+  isEqualTo(rule) {
+    let equalTo = false;
+
+    const ruleType = rule.getType();
+
+    if (ruleType === this.type) {
+      const rulePattern = rule.getPattern();
+
+      if (rulePattern === this.pattern) {
+        equalTo = true;
+      }
+    }
+
+    return equalTo;
+  }
+
   asString() {
     const string = addForwardSlashes(this.pattern);  ///
 
@@ -82,7 +103,7 @@ class RegexRule {
       const { pattern } = json,
             regExp = new RegExp(pattern);
 
-      regexRule = new RegexRule(pattern, regExp);
+      regexRule = new RegexRule(type, pattern, regExp);
     }
 
     return regexRule;
@@ -94,9 +115,10 @@ class RegexRule {
     const pattern = patternFromStringAndDirectory(string, anchored, directory);
 
     if (pattern !== null) {
-      const regExp = new RegExp(pattern);
+      const type = REGEX_TYPE,
+            regExp = new RegExp(pattern);
 
-      regexRule = new RegexRule(pattern, regExp);
+      regexRule = new RegexRule(type, pattern, regExp);
     }
 
     return regexRule;

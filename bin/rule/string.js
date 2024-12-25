@@ -7,8 +7,13 @@ const { STRING_TYPE } = require("../types"),
       { removeDoubleQuotes, addTrailingForwardSlash, removeTrailingForwardSlash } = require("../utilities/string");
 
 class StringRule {
-  constructor(string) {
+  constructor(type, string) {
+    this.type = type;
     this.string = string;
+  }
+
+  getType() {
+    return this.type;
   }
 
   getString() {
@@ -16,7 +21,7 @@ class StringRule {
   }
 
   toJSON() {
-    const type = STRING_TYPE,
+    const type = this.type,
           string = this.string,
           json = {
             type,
@@ -58,6 +63,22 @@ class StringRule {
     return matches;
   }
 
+  isEqualTo(rule) {
+    let equalTo = false;
+
+    const ruleType = rule.getType();
+
+    if (ruleType === this.type) {
+      const ruleString = rule.getString();
+
+      if (ruleString === this.string) {
+        equalTo = true;
+      }
+    }
+
+    return equalTo;
+  }
+
   asString() {
     return this.string;
   }
@@ -70,7 +91,7 @@ class StringRule {
     if (type === STRING_TYPE) {
       const { string } = json;
 
-      stringRule = new StringRule(string);
+      stringRule = new StringRule(type, string);
     }
 
     return stringRule;
@@ -82,7 +103,9 @@ class StringRule {
     string = stringFromStringAndDirectory(string, directory); ///
 
     if (string !== null) {
-      stringRule = new StringRule(string);
+      const type = STRING_TYPE; ///
+
+      stringRule = new StringRule(type, string);
     }
 
     return stringRule;

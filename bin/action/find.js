@@ -1,18 +1,20 @@
 "use strict";
 
-const ruleOperation = require("../operation/rule"),
-      findOperation = require("../operation/find"),
+const findOperation = require("../operation/find"),
+      ruleOperation = require("../operation/rule"),
       rulePromptOperation = require("../operation/prompt/rule"),
-      readConfigurationOperation = require("../operation/readConfiguration");
+      previousRuleOperation = require("../operation/previousRule"),
+      previousRulePromptOperation = require("../operation/prompt/previousRule");
 
 const { S, EMPTY_STRING } = require("../constants"),
       { executeOperations } = require("../utilities/operation");
 
-function findAction(string, dryRun, format, quietly, interactive) {
+function findAction(string, dryRun, format, quietly, previous, interactive) {
   const operations = [
           ruleOperation,
+          previousRulePromptOperation,
           rulePromptOperation,
-          readConfigurationOperation,
+          previousRuleOperation,
           findOperation
         ],
         rule = null,
@@ -26,6 +28,7 @@ function findAction(string, dryRun, format, quietly, interactive) {
           dryRun,
           format,
           quietly,
+          previous,
           interactive,
           rule,
           lines,
