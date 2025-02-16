@@ -14,6 +14,8 @@ const { UTF8_ENCODING } = encodings,
         NEW_LINE_CHARACTER,
         CARRIAGE_RETURN_CHARACTER } = characters;
 
+function isAnswerIgnore(answer) { return /^(:?ignore|i)$/i.test(answer); }
+
 function selectPreviousRule(previousRules, callback) {
   let index = 0,
       previousRule = previousRules[index];
@@ -111,6 +113,7 @@ function selectPreviousRule(previousRules, callback) {
 }
 
 module.exports = {
+  isAnswerIgnore,
   selectPreviousRule
 };
 
