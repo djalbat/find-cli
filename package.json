@@ -1,7 +1,7 @@
 {
   "name": "find-cli",
   "author": "James Smith",
-  "version": "1.7.8",
+  "version": "1.7.9",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/find-cli",
   "description": "An alternative to grep.",
