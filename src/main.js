@@ -19,7 +19,11 @@ import { FIND_COMMAND,
          REMOVE_ROOT_DIRECTORY_PATH_COMMAND } from "./commands";
 
 export default function main(command, argument, options) {
-  const { format = DEFAULT_FORMAT, dryRun = DEFAULT_DRY_RUN, quietly = DEFAULT_QUIETLY, previous = DEFAULT_PREVIOUS, interactive = DEFAULT_INTERACTIVE } = options;
+  const { format = DEFAULT_FORMAT,
+          dryRun = DEFAULT_DRY_RUN,
+          quietly = DEFAULT_QUIETLY,
+          previous = DEFAULT_PREVIOUS,
+          interactive = DEFAULT_INTERACTIVE } = options;
 
   let { regex = DEFAULT_REGEX, string = DEFAULT_STRING } = options;
 
