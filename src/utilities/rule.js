@@ -1,8 +1,8 @@
 "use strict";
 
-const GlobRule = require("../rule/glob"),
-      RegexRule = require("../rule/regex"),
-      StringRule = require("../rule/string");
+import GlobRule from "../rule/glob";
+import RegexRule from "../rule/regex";
+import StringRule from "../rule/string";
 
 export function ruleFromStringAnchoredAndDirectory(string, anchored, directory) {
   const globRule = GlobRule.fromStringAnchoredAndDirectory(string, anchored, directory),

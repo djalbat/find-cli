@@ -1,6 +1,7 @@
 "use strict";
 
-import { findInEntries } from "../utilities/find";
+import findInEntries from "../utilities/find";
+
 import { retrieveRootDirectoryPaths,
          retrieveIgnoredFilePathRules,
          retrievePermittedFilePathRules,

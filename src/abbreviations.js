@@ -1,15 +1,15 @@
 "use strict";
 
-const { HELP_OPTION,
-        GLOB_OPTION,
-        REGEX_OPTION,
-        STRING_OPTION,
-        FORMAT_OPTION,
-        VERSION_OPTION,
-        DRY_RUN_OPTION,
-        QUIETLY_OPTION,
-        PREVIOUS_OPTION,
-        INTERACTIVE_OPTION } = require("./options");
+import { HELP_OPTION,
+         GLOB_OPTION,
+         REGEX_OPTION,
+         STRING_OPTION,
+         FORMAT_OPTION,
+         VERSION_OPTION,
+         DRY_RUN_OPTION,
+         QUIETLY_OPTION,
+         PREVIOUS_OPTION,
+         INTERACTIVE_OPTION } from "./options";
 
 const h = HELP_OPTION,
       g = GLOB_OPTION,
