@@ -1,11 +1,12 @@
 "use strict";
 
-import { arrayUtilities } from "necessary";
+import { characters, arrayUtilities } from "necessary";
 
+import { EMPTY_STRING } from "./constants";
 import { grey, blue, yellow } from "./utilities/log";
-import { EMPTY_STRING, SINGLE_SPACE } from "./constants";
 
-const { backwardsForEach } = arrayUtilities;
+const { SPACE_CHARACTER } = characters,
+      { backwardsForEach } = arrayUtilities;
 
 export default class Line {
   constructor(index, content, filePath, occurrences) {
@@ -67,10 +68,10 @@ export default class Line {
     let index;
 
     const indexLength = this.getIndexLength(),
-          paddingLength = requiredIndexLength - indexLength,
-          padding = paddingFromPaddingLength(paddingLength);
+          marginWidth = requiredIndexLength - indexLength,
+          marginString = marginStringFromMarginWidth(marginWidth);
 
-    index = `${padding}${this.index}`;
+    index = `${marginString}${this.index}`;
 
     const formattedIndex = yellow(index);
 
@@ -140,9 +141,9 @@ export default class Line {
 
   getFormattedFilePath(requiredFilePathLength) {
     const filePathLength = this.getFilePathLength(),
-          paddingLength = requiredFilePathLength - filePathLength,
-          padding = paddingFromPaddingLength(paddingLength),
-          formattedFilePath =  `${this.filePath}${padding}`;
+          marginWidth = requiredFilePathLength - filePathLength,
+          marginString = marginStringFromMarginWidth(marginWidth),
+          formattedFilePath =  `${this.filePath}${marginString}`;
 
     return formattedFilePath;
   }
@@ -174,12 +175,8 @@ export default class Line {
   }
 }
 
-function paddingFromPaddingLength(paddingLength) {
-  let padding = EMPTY_STRING;
+export function marginStringFromMarginWidth(marginWidth) {
+  const marginString = SPACE_CHARACTER.repeat(marginWidth);
 
-  for (let count = 0; count < paddingLength; count++) {
-    padding += SINGLE_SPACE;
-  }
-
-  return padding;
+  return marginString;
 }
