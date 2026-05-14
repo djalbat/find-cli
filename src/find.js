@@ -48,7 +48,7 @@ export default function find(filePath, context) {
 }
 
 function linesFromContentAndFilePath(content, filePath) {
-  const contents = content.split(/(\r\n|\r|\n)/),
+  const contents = content.split(/\r?\n/),
         lines = contents.map((content, index) => {
           const line = Line.fromIndexContentAndFilePath(index, content, filePath);
 
